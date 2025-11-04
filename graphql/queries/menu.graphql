@@ -1,0 +1,13 @@
+query GetMenu {
+  menu_items {
+    id
+    category_id
+    name
+    description
+    price
+    image_url
+    is_available
+    created_at
+    updated_at
+  }
+}

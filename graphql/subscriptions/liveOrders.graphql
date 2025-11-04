@@ -1,0 +1,13 @@
+subscription GetLiveOrders {
+  orders {
+    id
+    user_id
+    total_amount
+    status
+    payment_status
+    delivery_address
+    delivery_instructions
+    created_at
+    updated_at
+  }
+}

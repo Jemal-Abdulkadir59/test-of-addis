@@ -1,0 +1,19 @@
+# GraphQL Code Generator Setup
+schema:
+  - ${HASURA_GRAPHQL_ENDPOINT}:
+      headers:
+        x-hasura-admin-secret: ${HASURA_ADMIN_SECRET}
+
+documents: ["./graphql/**/*.graphql"]
+
+generates:
+  ./generated/graphql.ts:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-react-apollo"
+    config:
+      withHooks: true
+      withHOC: false
+      withComponent: false
+      reactApolloVersion: 4

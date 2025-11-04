@@ -1,8 +1,10 @@
 "use client"
 
 import { useState } from "react"
+import { useGetMenuQuery } from "@/generated/graphql"
 
 import { useToast } from "@/hooks/use-toast"
+import { Skeleton } from "@/components/ui/skeleton"
 import { CartItem } from "./_components/cart"
 // import CartSheet from "./_components/cart-sheet"
 import CategoryTabs from "./_components/category-tabs"
@@ -12,6 +14,9 @@ import OfferCard from "./_components/offer-card"
 import OfferDetail from "./_components/offer-detail"
 import ProductCard from "./_components/product-card"
 import ProductDetail from "./_components/product-detail"
+import CategoryTabsSkeleton from "@/components/skeleton/categoryTabsSkeleton"
+import ProductCardSkeleton from "@/components/skeleton/productCardSkeleton"
+import { SpecialOffersSkeleton } from "@/components/skeleton/specialOffersSkeleton"
 
 const Index = () => {
   const { toast } = useToast()
@@ -147,6 +152,8 @@ const Index = () => {
     },
   ]
 
+  // Query Data
+
   const handleAddToCart = (item: any, quantity: number) => {
     const newItem: CartItem = {
       id: `${item.type}-${Date.now()}-${Math.random()}`,
@@ -165,31 +172,6 @@ const Index = () => {
     })
   }
 
-  // const handleUpdateQuantity = (id: string, quantity: number) => {
-  //   setCartItems(
-  //     cartItems.map((item) => (item.id === id ? { ...item, quantity } : item))
-  //   )
-  // }
-
-  // const handleRemoveItem = (id: string) => {
-  //   setCartItems(cartItems.filter((item) => item.id !== id))
-  //   toast({
-  //     title: "Removed from cart",
-  //     description: "Item has been removed from your cart.",
-  //   })
-  // }
-
-  // const handleCheckout = () => {
-  //   if (cartItems.length === 0) {
-  //     toast({
-  //       title: "Cart is empty",
-  //       description: "Please add items to your cart before checking out.",
-  //       variant: "destructive",
-  //     })
-  //     return
-  //   }
-  //   navigate("/checkout", { state: { cartItems } })
-  // }
   const handleOfferClick = (offer: any) => {
     setSelectedOffer(offer)
 
@@ -202,11 +184,15 @@ const Index = () => {
     }, 100) // small delay ensures OfferDetail is mounted
   }
 
+  const { data, loading, error } = useGetMenuQuery()
+
+  console.log("Menu Data:", data, loading, error)
+
   return (
     <div className="min-h-screen">
       {/*<Header*/}
-      <HeroSection />
-      <CategoryTabs />
+      <HeroSection isLoading={loading} />
+      {loading ? <CategoryTabsSkeleton /> : <CategoryTabs />}
 
       <main className="container mx-auto px-4 py-8">
         {selectedOffer && (
@@ -218,34 +204,42 @@ const Index = () => {
             />
           </div>
         )}
-
-        <section id="offers" className="mb-12">
-          <h2 className="text-3xl font-bold mb-6">Special Offers</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {offers.map((offer) => (
-              <OfferCard
-                key={offer.id}
-                {...offer}
-                onClick={() => handleOfferClick(offer)}
-              />
-            ))}
-          </div>
-        </section>
-
-        <section>
-          <h2 className="text-3xl font-bold mb-6">Foods</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {products.map((product) => (
-              <ProductCard
-                key={product.id}
-                {...product}
-                image={product.image}
-                onClick={() => setSelectedProduct(product)}
-                onAddToCart={handleAddToCart}
-              />
-            ))}
-          </div>
-        </section>
+        {loading ? (
+          <SpecialOffersSkeleton />
+        ) : (
+          <section id="offers" className="mb-12">
+            <h2 className="text-3xl font-bold mb-6">Special Offers</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {offers.map((offer) => (
+                <OfferCard
+                  key={offer.id}
+                  {...offer}
+                  onClick={() => handleOfferClick(offer)}
+                />
+              ))}
+            </div>
+          </section>
+        )}
+        {loading ? (
+          Array.from({ length: 6 }).map((_, i) => (
+            <ProductCardSkeleton key={i} />
+          ))
+        ) : (
+          <section>
+            <h2 className="text-3xl font-bold mb-6">Foods</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {products.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  {...product}
+                  image={product.image}
+                  onClick={() => setSelectedProduct(product)}
+                  onAddToCart={handleAddToCart}
+                />
+              ))}
+            </div>
+          </section>
+        )}
       </main>
 
       {/* <CartSheet
@@ -270,3 +264,29 @@ const Index = () => {
 }
 
 export default Index
+
+// const handleUpdateQuantity = (id: string, quantity: number) => {
+//   setCartItems(
+//     cartItems.map((item) => (item.id === id ? { ...item, quantity } : item))
+//   )
+// }
+
+// const handleRemoveItem = (id: string) => {
+//   setCartItems(cartItems.filter((item) => item.id !== id))
+//   toast({
+//     title: "Removed from cart",
+//     description: "Item has been removed from your cart.",
+//   })
+// }
+
+// const handleCheckout = () => {
+//   if (cartItems.length === 0) {
+//     toast({
+//       title: "Cart is empty",
+//       description: "Please add items to your cart before checking out.",
+//       variant: "destructive",
+//     })
+//     return
+//   }
+//   navigate("/checkout", { state: { cartItems } })
+// }

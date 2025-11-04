@@ -1,0 +1,144 @@
+🧠 GIT + GITHUB ULTIMATE COMMAND CHEAT SHEET
+🔰 1. Start a New Repository
+git init                              # Create a new local Git repo
+git add .                             # Stage all files
+git commit -m "Initial commit"        # Commit your changes
+git branch -M main                    # Rename default branch to main
+git remote add origin https://github.com/USERNAME/REPO.git  # Link to GitHub
+git push -u origin main               # Push to GitHub
+
+🌿 2. Create and Switch Branches
+git branch new-feature                # Create a new branch
+git checkout new-feature              # Switch to it
+# OR shorthand:
+git checkout -b new-feature           # Create + switch in one
+
+
+Check all branches:
+
+git branch
+
+
+Delete a branch (locally):
+
+git branch -d new-feature
+
+
+Delete remote branch:
+
+git push origin --delete new-feature
+
+🚀 3. Push and Pull
+git push origin new-feature           # Push new branch to GitHub
+git pull origin main                  # Pull latest changes from main
+
+🧩 4. Merge Branches
+
+Switch to the branch you want to merge into (usually main):
+
+git checkout main
+git pull origin main                  # Make sure it's up to date
+git merge new-feature                 # Merge another branch
+git push origin main                  # Push merged result
+
+
+If there’s a merge conflict, open the conflicting files, fix them manually, then:
+
+git add .
+git commit -m "Resolve merge conflict"
+git push origin main
+
+🧼 5. Undo Mistakes
+
+Unstage a file:
+
+git restore --staged file.txt
+
+
+Discard local changes:
+
+git restore file.txt
+
+
+Undo last commit (keep changes):
+
+git reset --soft HEAD~1
+
+
+Undo last commit (discard changes):
+
+git reset --hard HEAD~1
+
+🕵️‍♂️ 6. See What’s Going On
+git status             # What’s changed / staged
+git log --oneline      # Commit history in one line
+git diff               # See file differences
+
+🧠 7. Rename Branch
+git branch -m old-name new-name
+git push origin :old-name new-name
+git push origin -u new-name
+
+💥 8. Force Push (replace remote branch)
+git push origin branch-name --force
+
+
+⚠️ Only use this when you’re sure — it overwrites history.
+
+🧭 9. Clone an Existing Repo
+git clone https://github.com/USERNAME/REPO.git
+cd REPO
+
+🔄 10. Sync Fork or Upstream Repo
+
+If you forked someone else’s repo:
+
+git remote add upstream https://github.com/ORIGINAL_USER/REPO.git
+git fetch upstream
+git merge upstream/main
+git push origin main
+
+🧩 11. GitHub Authentication (if prompted)
+
+You can authenticate via browser token or manually:
+
+git config --global user.name "Your Name"
+git config --global user.email "your@email.com"
+
+
+Then, when pushing, GitHub may ask for a Personal Access Token (PAT) —
+create one at: https://github.com/settings/tokens
+
+🧹 12. Start Fresh (Reset Repo)
+
+If you want a completely clean repo (delete all commits):
+
+Remove-Item -Recurse -Force .git      # PowerShell
+git init
+git add .
+git commit -m "Initial commit"
+git branch -M main
+git remote add origin https://github.com/USERNAME/REPO.git
+git push -u origin main --force
+
+💡 13. Useful Extras
+git stash save "WIP"                  # Temporarily save uncommitted work
+git stash pop                         # Restore stashed work
+git tag v1.0                          # Create a tag
+git push origin v1.0                  # Push tag to GitHub
+
+🎯 14. Typical Workflow Example
+# Create a feature branch
+git checkout -b feature/login-page
+
+# Work and commit
+git add .
+git commit -m "Add login UI"
+
+# Push to GitHub
+git push -u origin feature/login-page
+
+# Open a Pull Request on GitHub
+
+🛠 15. Set Default Editor (optional)
+git config --global core.editor "code --wait"  # VS Code

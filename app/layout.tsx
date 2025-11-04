@@ -12,6 +12,7 @@ import type { ReactNode } from "react"
 
 import { Toaster as Sonner } from "@/components/ui/sonner"
 import { Toaster } from "@/components/ui/toaster"
+import { ApolloProviders } from "./ApolloProviders"
 import { SessionProviders } from "./SessionProviders"
 
 // Define metadata for the application
@@ -57,11 +58,13 @@ export default function RootLayout(props: { children: ReactNode }) {
       >
         <Providers locale="en">
           <BrowserRouter>
-            <SessionProviders>
-              {children}
-              <Toaster />
-              <Sonner />
-            </SessionProviders>
+            <ApolloProviders>
+              <SessionProviders>
+                {children}
+                <Toaster />
+                <Sonner />
+              </SessionProviders>
+            </ApolloProviders>
           </BrowserRouter>
         </Providers>
       </body>

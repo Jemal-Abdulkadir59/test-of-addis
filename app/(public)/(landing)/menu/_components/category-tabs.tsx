@@ -1,8 +1,10 @@
-'use client';
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
-import { useState } from "react";
+"use client"
+
+import { useState } from "react"
+import { Search } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 
 const categories = [
   "Offers",
@@ -16,17 +18,17 @@ const categories = [
   "Hot drinks",
   "Sauces",
   "Orbit®",
-];
+]
 
 const CategoryTabs = () => {
-  const [activeCategory, setActiveCategory] = useState("Offers");
+  const [activeCategory, setActiveCategory] = useState("Offers")
 
   return (
     <section className="bg-card border-b sticky top-0 z-10">
       <div className="container mx-auto px-4 py-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold">
-            All Offers from McDonald's East London
+            All Offers from Test Of Addis
           </h2>
           <div className="relative w-64 hidden md:block">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -48,7 +50,7 @@ const CategoryTabs = () => {
         </div>
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default CategoryTabs;
+export default CategoryTabs

@@ -1,0 +1,25 @@
+mutation CreateOrder(
+  $user_id: uuid!
+  $total_amount: numeric!
+  $delivery_address: String!
+  $delivery_instructions: String
+) {
+  insert_orders_one(
+    object: {
+      user_id: $user_id
+      total_amount: $total_amount
+      delivery_address: $delivery_address
+      delivery_instructions: $delivery_instructions
+    }
+  ) {
+    id
+    user_id
+    total_amount
+    status
+    payment_status
+    delivery_address
+    delivery_instructions
+    created_at
+    updated_at
+  }
+}

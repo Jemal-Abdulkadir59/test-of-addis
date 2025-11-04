@@ -76,3 +76,65 @@ That keeps everything responsive on both mobile and laptop sizes.
 
 # shadcn ui starter source code
 https://github.com/bikrantlabs/next14-shadcn-starter?utm_source=chatgpt.com
+
+
+#CODEGNE (codgen)
+  pnpm install dotenv --save-dev
+dotenv is needed so --require dotenv/config can read your .env file.
+"scripts": {
+  "codegen": "graphql-codegen --require dotenv/config"
+}
+pnpm run codegen
+
+ Remove-Item -Recurse -Force .\generated
+ 
+when error happened 
+ pnpm install -D @graphql-codegen/typescript @graphql-codegen/typescript-operations @graphql-codegen/typescript-react-apollo
+use
+import * as Apollo from "@apollo/client/react"
+
+4# Alternative: Enable long paths in Windows
+Open regedit.
+Go to: HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem.
+Set LongPathsEnabled to 1.
+Reboot.
+After this, PowerShell and Node.js can handle paths >260 characters.
+
+
+2. Protected queries (like placing an order)
+import { usePlaceOrderMutation } from "@/generated/graphql"
+import { useSession } from "next-auth/react"
+
+export function PlaceOrderButton() {
+  const { data: session } = useSession()
+  const [placeOrder, { loading, error }] = usePlaceOrderMutation()
+
+  const handleOrder = async () => {
+    if (!session) {
+      alert("Please log in to place an order.")
+      return
+    }
+
+    try {
+      await placeOrder({
+        variables: {
+          input: {
+            item_id: "123",
+            quantity: 2,
+          },
+        },
+      })
+      alert("✅ Order placed successfully!")
+    } catch (err) {
+      console.error(err)
+      alert("❌ Failed to place order.")
+    }
+  }
+
+  return (
+    <button onClick={handleOrder} disabled={loading}>
+      {loading ? "Placing..." : "Place Order"}
+    </button>
+  )
+}
+
