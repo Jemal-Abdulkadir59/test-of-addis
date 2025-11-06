@@ -6,7 +6,7 @@ export function SpecialOffersSkeleton() {
     <section id="offers" className="mb-12">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 ">
         {[...Array(3)].map((_, i) => (
-          <Card className="relative overflow-hidden">
+          <Card className="relative overflow-hidden" key={i}>
             {/* Image placeholder */}
             <div className="relative h-40 overflow-hidden">
               <Skeleton className="w-full h-full" />

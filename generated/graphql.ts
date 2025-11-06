@@ -29,6 +29,7 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean }
   Int: { input: number; output: number }
   Float: { input: number; output: number }
+  jsonb: { input: any; output: any }
   numeric: { input: any; output: any }
   timestamp: { input: any; output: any }
   timestamptz: { input: any; output: any }
@@ -106,8 +107,12 @@ export type Cart = {
   __typename?: "cart"
   added_at?: Maybe<Scalars["timestamptz"]["output"]>
   id: Scalars["uuid"]["output"]
+  /** An object relationship */
+  menu_item: Menu_Items
   menu_item_id: Scalars["uuid"]["output"]
   quantity: Scalars["Int"]["output"]
+  /** An object relationship */
+  user: Users
   user_id: Scalars["uuid"]["output"]
 }
 
@@ -153,8 +158,10 @@ export type Cart_Bool_Exp = {
   _or?: InputMaybe<Array<Cart_Bool_Exp>>
   added_at?: InputMaybe<Timestamptz_Comparison_Exp>
   id?: InputMaybe<Uuid_Comparison_Exp>
+  menu_item?: InputMaybe<Menu_Items_Bool_Exp>
   menu_item_id?: InputMaybe<Uuid_Comparison_Exp>
   quantity?: InputMaybe<Int_Comparison_Exp>
+  user?: InputMaybe<Users_Bool_Exp>
   user_id?: InputMaybe<Uuid_Comparison_Exp>
 }
 
@@ -175,8 +182,10 @@ export type Cart_Inc_Input = {
 export type Cart_Insert_Input = {
   added_at?: InputMaybe<Scalars["timestamptz"]["input"]>
   id?: InputMaybe<Scalars["uuid"]["input"]>
+  menu_item?: InputMaybe<Menu_Items_Obj_Rel_Insert_Input>
   menu_item_id?: InputMaybe<Scalars["uuid"]["input"]>
   quantity?: InputMaybe<Scalars["Int"]["input"]>
+  user?: InputMaybe<Users_Obj_Rel_Insert_Input>
   user_id?: InputMaybe<Scalars["uuid"]["input"]>
 }
 
@@ -220,8 +229,10 @@ export type Cart_On_Conflict = {
 export type Cart_Order_By = {
   added_at?: InputMaybe<Order_By>
   id?: InputMaybe<Order_By>
+  menu_item?: InputMaybe<Menu_Items_Order_By>
   menu_item_id?: InputMaybe<Order_By>
   quantity?: InputMaybe<Order_By>
+  user?: InputMaybe<Users_Order_By>
   user_id?: InputMaybe<Order_By>
 }
 
@@ -534,6 +545,34 @@ export type Deliveries_Updates = {
   _set?: InputMaybe<Deliveries_Set_Input>
   /** filter the rows which have to be updated */
   where: Deliveries_Bool_Exp
+}
+
+export type Jsonb_Cast_Exp = {
+  String?: InputMaybe<String_Comparison_Exp>
+}
+
+/** Boolean expression to compare columns of type "jsonb". All fields are combined with logical 'AND'. */
+export type Jsonb_Comparison_Exp = {
+  _cast?: InputMaybe<Jsonb_Cast_Exp>
+  /** is the column contained in the given json value */
+  _contained_in?: InputMaybe<Scalars["jsonb"]["input"]>
+  /** does the column contain the given json value at the top level */
+  _contains?: InputMaybe<Scalars["jsonb"]["input"]>
+  _eq?: InputMaybe<Scalars["jsonb"]["input"]>
+  _gt?: InputMaybe<Scalars["jsonb"]["input"]>
+  _gte?: InputMaybe<Scalars["jsonb"]["input"]>
+  /** does the string exist as a top-level key in the column */
+  _has_key?: InputMaybe<Scalars["String"]["input"]>
+  /** do all of these strings exist as top-level keys in the column */
+  _has_keys_all?: InputMaybe<Array<Scalars["String"]["input"]>>
+  /** do any of these strings exist as top-level keys in the column */
+  _has_keys_any?: InputMaybe<Array<Scalars["String"]["input"]>>
+  _in?: InputMaybe<Array<Scalars["jsonb"]["input"]>>
+  _is_null?: InputMaybe<Scalars["Boolean"]["input"]>
+  _lt?: InputMaybe<Scalars["jsonb"]["input"]>
+  _lte?: InputMaybe<Scalars["jsonb"]["input"]>
+  _neq?: InputMaybe<Scalars["jsonb"]["input"]>
+  _nin?: InputMaybe<Array<Scalars["jsonb"]["input"]>>
 }
 
 /** columns and relationships of "kitchen_orders" */
@@ -889,15 +928,23 @@ export type Menu_Categories_Updates = {
 /** columns and relationships of "menu_items" */
 export type Menu_Items = {
   __typename?: "menu_items"
+  allergens: Scalars["jsonb"]["output"]
+  calories?: Maybe<Scalars["numeric"]["output"]>
   category_id: Scalars["uuid"]["output"]
   created_at: Scalars["timestamptz"]["output"]
   description: Scalars["String"]["output"]
   id: Scalars["uuid"]["output"]
   image_url: Scalars["String"]["output"]
+  ingredients: Scalars["String"]["output"]
   is_available: Scalars["Boolean"]["output"]
   name: Scalars["String"]["output"]
   price: Scalars["numeric"]["output"]
   updated_at: Scalars["timestamptz"]["output"]
+}
+
+/** columns and relationships of "menu_items" */
+export type Menu_ItemsAllergensArgs = {
+  path?: InputMaybe<Scalars["String"]["input"]>
 }
 
 /** aggregated selection of "menu_items" */
@@ -929,9 +976,15 @@ export type Menu_Items_Aggregate_FieldsCountArgs = {
   distinct?: InputMaybe<Scalars["Boolean"]["input"]>
 }
 
+/** append existing jsonb value of filtered columns with new jsonb value */
+export type Menu_Items_Append_Input = {
+  allergens?: InputMaybe<Scalars["jsonb"]["input"]>
+}
+
 /** aggregate avg on columns */
 export type Menu_Items_Avg_Fields = {
   __typename?: "menu_items_avg_fields"
+  calories?: Maybe<Scalars["Float"]["output"]>
   price?: Maybe<Scalars["Float"]["output"]>
 }
 
@@ -940,11 +993,14 @@ export type Menu_Items_Bool_Exp = {
   _and?: InputMaybe<Array<Menu_Items_Bool_Exp>>
   _not?: InputMaybe<Menu_Items_Bool_Exp>
   _or?: InputMaybe<Array<Menu_Items_Bool_Exp>>
+  allergens?: InputMaybe<Jsonb_Comparison_Exp>
+  calories?: InputMaybe<Numeric_Comparison_Exp>
   category_id?: InputMaybe<Uuid_Comparison_Exp>
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>
   description?: InputMaybe<String_Comparison_Exp>
   id?: InputMaybe<Uuid_Comparison_Exp>
   image_url?: InputMaybe<String_Comparison_Exp>
+  ingredients?: InputMaybe<String_Comparison_Exp>
   is_available?: InputMaybe<Boolean_Comparison_Exp>
   name?: InputMaybe<String_Comparison_Exp>
   price?: InputMaybe<Numeric_Comparison_Exp>
@@ -957,18 +1013,37 @@ export enum Menu_Items_Constraint {
   MenuItemsPkey = "menu_items_pkey",
 }
 
+/** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+export type Menu_Items_Delete_At_Path_Input = {
+  allergens?: InputMaybe<Array<Scalars["String"]["input"]>>
+}
+
+/** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+export type Menu_Items_Delete_Elem_Input = {
+  allergens?: InputMaybe<Scalars["Int"]["input"]>
+}
+
+/** delete key/value pair or string element. key/value pairs are matched based on their key value */
+export type Menu_Items_Delete_Key_Input = {
+  allergens?: InputMaybe<Scalars["String"]["input"]>
+}
+
 /** input type for incrementing numeric columns in table "menu_items" */
 export type Menu_Items_Inc_Input = {
+  calories?: InputMaybe<Scalars["numeric"]["input"]>
   price?: InputMaybe<Scalars["numeric"]["input"]>
 }
 
 /** input type for inserting data into table "menu_items" */
 export type Menu_Items_Insert_Input = {
+  allergens?: InputMaybe<Scalars["jsonb"]["input"]>
+  calories?: InputMaybe<Scalars["numeric"]["input"]>
   category_id?: InputMaybe<Scalars["uuid"]["input"]>
   created_at?: InputMaybe<Scalars["timestamptz"]["input"]>
   description?: InputMaybe<Scalars["String"]["input"]>
   id?: InputMaybe<Scalars["uuid"]["input"]>
   image_url?: InputMaybe<Scalars["String"]["input"]>
+  ingredients?: InputMaybe<Scalars["String"]["input"]>
   is_available?: InputMaybe<Scalars["Boolean"]["input"]>
   name?: InputMaybe<Scalars["String"]["input"]>
   price?: InputMaybe<Scalars["numeric"]["input"]>
@@ -978,11 +1053,13 @@ export type Menu_Items_Insert_Input = {
 /** aggregate max on columns */
 export type Menu_Items_Max_Fields = {
   __typename?: "menu_items_max_fields"
+  calories?: Maybe<Scalars["numeric"]["output"]>
   category_id?: Maybe<Scalars["uuid"]["output"]>
   created_at?: Maybe<Scalars["timestamptz"]["output"]>
   description?: Maybe<Scalars["String"]["output"]>
   id?: Maybe<Scalars["uuid"]["output"]>
   image_url?: Maybe<Scalars["String"]["output"]>
+  ingredients?: Maybe<Scalars["String"]["output"]>
   name?: Maybe<Scalars["String"]["output"]>
   price?: Maybe<Scalars["numeric"]["output"]>
   updated_at?: Maybe<Scalars["timestamptz"]["output"]>
@@ -991,11 +1068,13 @@ export type Menu_Items_Max_Fields = {
 /** aggregate min on columns */
 export type Menu_Items_Min_Fields = {
   __typename?: "menu_items_min_fields"
+  calories?: Maybe<Scalars["numeric"]["output"]>
   category_id?: Maybe<Scalars["uuid"]["output"]>
   created_at?: Maybe<Scalars["timestamptz"]["output"]>
   description?: Maybe<Scalars["String"]["output"]>
   id?: Maybe<Scalars["uuid"]["output"]>
   image_url?: Maybe<Scalars["String"]["output"]>
+  ingredients?: Maybe<Scalars["String"]["output"]>
   name?: Maybe<Scalars["String"]["output"]>
   price?: Maybe<Scalars["numeric"]["output"]>
   updated_at?: Maybe<Scalars["timestamptz"]["output"]>
@@ -1010,6 +1089,13 @@ export type Menu_Items_Mutation_Response = {
   returning: Array<Menu_Items>
 }
 
+/** input type for inserting object relation for remote table "menu_items" */
+export type Menu_Items_Obj_Rel_Insert_Input = {
+  data: Menu_Items_Insert_Input
+  /** upsert condition */
+  on_conflict?: InputMaybe<Menu_Items_On_Conflict>
+}
+
 /** on_conflict condition type for table "menu_items" */
 export type Menu_Items_On_Conflict = {
   constraint: Menu_Items_Constraint
@@ -1019,11 +1105,14 @@ export type Menu_Items_On_Conflict = {
 
 /** Ordering options when selecting data from "menu_items". */
 export type Menu_Items_Order_By = {
+  allergens?: InputMaybe<Order_By>
+  calories?: InputMaybe<Order_By>
   category_id?: InputMaybe<Order_By>
   created_at?: InputMaybe<Order_By>
   description?: InputMaybe<Order_By>
   id?: InputMaybe<Order_By>
   image_url?: InputMaybe<Order_By>
+  ingredients?: InputMaybe<Order_By>
   is_available?: InputMaybe<Order_By>
   name?: InputMaybe<Order_By>
   price?: InputMaybe<Order_By>
@@ -1035,8 +1124,17 @@ export type Menu_Items_Pk_Columns_Input = {
   id: Scalars["uuid"]["input"]
 }
 
+/** prepend existing jsonb value of filtered columns with new jsonb value */
+export type Menu_Items_Prepend_Input = {
+  allergens?: InputMaybe<Scalars["jsonb"]["input"]>
+}
+
 /** select columns of table "menu_items" */
 export enum Menu_Items_Select_Column {
+  /** column name */
+  Allergens = "allergens",
+  /** column name */
+  Calories = "calories",
   /** column name */
   CategoryId = "category_id",
   /** column name */
@@ -1047,6 +1145,8 @@ export enum Menu_Items_Select_Column {
   Id = "id",
   /** column name */
   ImageUrl = "image_url",
+  /** column name */
+  Ingredients = "ingredients",
   /** column name */
   IsAvailable = "is_available",
   /** column name */
@@ -1059,11 +1159,14 @@ export enum Menu_Items_Select_Column {
 
 /** input type for updating data in table "menu_items" */
 export type Menu_Items_Set_Input = {
+  allergens?: InputMaybe<Scalars["jsonb"]["input"]>
+  calories?: InputMaybe<Scalars["numeric"]["input"]>
   category_id?: InputMaybe<Scalars["uuid"]["input"]>
   created_at?: InputMaybe<Scalars["timestamptz"]["input"]>
   description?: InputMaybe<Scalars["String"]["input"]>
   id?: InputMaybe<Scalars["uuid"]["input"]>
   image_url?: InputMaybe<Scalars["String"]["input"]>
+  ingredients?: InputMaybe<Scalars["String"]["input"]>
   is_available?: InputMaybe<Scalars["Boolean"]["input"]>
   name?: InputMaybe<Scalars["String"]["input"]>
   price?: InputMaybe<Scalars["numeric"]["input"]>
@@ -1073,18 +1176,21 @@ export type Menu_Items_Set_Input = {
 /** aggregate stddev on columns */
 export type Menu_Items_Stddev_Fields = {
   __typename?: "menu_items_stddev_fields"
+  calories?: Maybe<Scalars["Float"]["output"]>
   price?: Maybe<Scalars["Float"]["output"]>
 }
 
 /** aggregate stddev_pop on columns */
 export type Menu_Items_Stddev_Pop_Fields = {
   __typename?: "menu_items_stddev_pop_fields"
+  calories?: Maybe<Scalars["Float"]["output"]>
   price?: Maybe<Scalars["Float"]["output"]>
 }
 
 /** aggregate stddev_samp on columns */
 export type Menu_Items_Stddev_Samp_Fields = {
   __typename?: "menu_items_stddev_samp_fields"
+  calories?: Maybe<Scalars["Float"]["output"]>
   price?: Maybe<Scalars["Float"]["output"]>
 }
 
@@ -1098,11 +1204,14 @@ export type Menu_Items_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Menu_Items_Stream_Cursor_Value_Input = {
+  allergens?: InputMaybe<Scalars["jsonb"]["input"]>
+  calories?: InputMaybe<Scalars["numeric"]["input"]>
   category_id?: InputMaybe<Scalars["uuid"]["input"]>
   created_at?: InputMaybe<Scalars["timestamptz"]["input"]>
   description?: InputMaybe<Scalars["String"]["input"]>
   id?: InputMaybe<Scalars["uuid"]["input"]>
   image_url?: InputMaybe<Scalars["String"]["input"]>
+  ingredients?: InputMaybe<Scalars["String"]["input"]>
   is_available?: InputMaybe<Scalars["Boolean"]["input"]>
   name?: InputMaybe<Scalars["String"]["input"]>
   price?: InputMaybe<Scalars["numeric"]["input"]>
@@ -1112,11 +1221,16 @@ export type Menu_Items_Stream_Cursor_Value_Input = {
 /** aggregate sum on columns */
 export type Menu_Items_Sum_Fields = {
   __typename?: "menu_items_sum_fields"
+  calories?: Maybe<Scalars["numeric"]["output"]>
   price?: Maybe<Scalars["numeric"]["output"]>
 }
 
 /** update columns of table "menu_items" */
 export enum Menu_Items_Update_Column {
+  /** column name */
+  Allergens = "allergens",
+  /** column name */
+  Calories = "calories",
   /** column name */
   CategoryId = "category_id",
   /** column name */
@@ -1128,6 +1242,8 @@ export enum Menu_Items_Update_Column {
   /** column name */
   ImageUrl = "image_url",
   /** column name */
+  Ingredients = "ingredients",
+  /** column name */
   IsAvailable = "is_available",
   /** column name */
   Name = "name",
@@ -1138,8 +1254,18 @@ export enum Menu_Items_Update_Column {
 }
 
 export type Menu_Items_Updates = {
+  /** append existing jsonb value of filtered columns with new jsonb value */
+  _append?: InputMaybe<Menu_Items_Append_Input>
+  /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+  _delete_at_path?: InputMaybe<Menu_Items_Delete_At_Path_Input>
+  /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+  _delete_elem?: InputMaybe<Menu_Items_Delete_Elem_Input>
+  /** delete key/value pair or string element. key/value pairs are matched based on their key value */
+  _delete_key?: InputMaybe<Menu_Items_Delete_Key_Input>
   /** increments the numeric columns with given value of the filtered values */
   _inc?: InputMaybe<Menu_Items_Inc_Input>
+  /** prepend existing jsonb value of filtered columns with new jsonb value */
+  _prepend?: InputMaybe<Menu_Items_Prepend_Input>
   /** sets the columns of the filtered rows to the given values */
   _set?: InputMaybe<Menu_Items_Set_Input>
   /** filter the rows which have to be updated */
@@ -1149,18 +1275,21 @@ export type Menu_Items_Updates = {
 /** aggregate var_pop on columns */
 export type Menu_Items_Var_Pop_Fields = {
   __typename?: "menu_items_var_pop_fields"
+  calories?: Maybe<Scalars["Float"]["output"]>
   price?: Maybe<Scalars["Float"]["output"]>
 }
 
 /** aggregate var_samp on columns */
 export type Menu_Items_Var_Samp_Fields = {
   __typename?: "menu_items_var_samp_fields"
+  calories?: Maybe<Scalars["Float"]["output"]>
   price?: Maybe<Scalars["Float"]["output"]>
 }
 
 /** aggregate variance on columns */
 export type Menu_Items_Variance_Fields = {
   __typename?: "menu_items_variance_fields"
+  calories?: Maybe<Scalars["Float"]["output"]>
   price?: Maybe<Scalars["Float"]["output"]>
 }
 
@@ -1613,14 +1742,24 @@ export type Mutation_RootUpdate_Menu_Categories_ManyArgs = {
 
 /** mutation root */
 export type Mutation_RootUpdate_Menu_ItemsArgs = {
+  _append?: InputMaybe<Menu_Items_Append_Input>
+  _delete_at_path?: InputMaybe<Menu_Items_Delete_At_Path_Input>
+  _delete_elem?: InputMaybe<Menu_Items_Delete_Elem_Input>
+  _delete_key?: InputMaybe<Menu_Items_Delete_Key_Input>
   _inc?: InputMaybe<Menu_Items_Inc_Input>
+  _prepend?: InputMaybe<Menu_Items_Prepend_Input>
   _set?: InputMaybe<Menu_Items_Set_Input>
   where: Menu_Items_Bool_Exp
 }
 
 /** mutation root */
 export type Mutation_RootUpdate_Menu_Items_By_PkArgs = {
+  _append?: InputMaybe<Menu_Items_Append_Input>
+  _delete_at_path?: InputMaybe<Menu_Items_Delete_At_Path_Input>
+  _delete_elem?: InputMaybe<Menu_Items_Delete_Elem_Input>
+  _delete_key?: InputMaybe<Menu_Items_Delete_Key_Input>
   _inc?: InputMaybe<Menu_Items_Inc_Input>
+  _prepend?: InputMaybe<Menu_Items_Prepend_Input>
   _set?: InputMaybe<Menu_Items_Set_Input>
   pk_columns: Menu_Items_Pk_Columns_Input
 }
@@ -3539,6 +3678,13 @@ export type Users_Mutation_Response = {
   returning: Array<Users>
 }
 
+/** input type for inserting object relation for remote table "users" */
+export type Users_Obj_Rel_Insert_Input = {
+  data: Users_Insert_Input
+  /** upsert condition */
+  on_conflict?: InputMaybe<Users_On_Conflict>
+}
+
 /** on_conflict condition type for table "users" */
 export type Users_On_Conflict = {
   constraint: Users_Constraint
@@ -3669,6 +3815,20 @@ export type Uuid_Comparison_Exp = {
   _nin?: InputMaybe<Array<Scalars["uuid"]["input"]>>
 }
 
+export type AddToCartMutationVariables = Exact<{
+  user_id: Scalars["uuid"]["input"]
+  menu_item_id: Scalars["uuid"]["input"]
+  quantity: Scalars["Int"]["input"]
+}>
+
+export type AddToCartMutation = {
+  __typename?: "mutation_root"
+  insert_cart_one?: {
+    __typename?: "cart"
+    menu_item: { __typename?: "menu_items"; name: string }
+  } | null
+}
+
 export type CreateOrderMutationVariables = Exact<{
   user_id: Scalars["uuid"]["input"]
   total_amount: Scalars["numeric"]["input"]
@@ -3712,6 +3872,49 @@ export type CreateOrderItemsMutation = {
   } | null
 }
 
+export type DeleteCartItemMutationVariables = Exact<{
+  id: Scalars["uuid"]["input"]
+}>
+
+export type DeleteCartItemMutation = {
+  __typename?: "mutation_root"
+  delete_cart_by_pk?: { __typename?: "cart"; id: any } | null
+}
+
+export type UpdateCartItemMutationVariables = Exact<{
+  id: Scalars["uuid"]["input"]
+  quantity: Scalars["Int"]["input"]
+}>
+
+export type UpdateCartItemMutation = {
+  __typename?: "mutation_root"
+  update_cart_by_pk?: { __typename?: "cart"; id: any; quantity: number } | null
+}
+
+export type GetUserCartQueryVariables = Exact<{
+  user_id: Scalars["uuid"]["input"]
+}>
+
+export type GetUserCartQuery = {
+  __typename?: "query_root"
+  cart: Array<{
+    __typename?: "cart"
+    id: any
+    quantity: number
+    added_at?: any | null
+    user: { __typename?: "users"; id: any; name: string; email: string }
+    menu_item: {
+      __typename?: "menu_items"
+      id: any
+      name: string
+      description: string
+      price: any
+      image_url: string
+      is_available: boolean
+    }
+  }>
+}
+
 export type GetMenuQueryVariables = Exact<{ [key: string]: never }>
 
 export type GetMenuQuery = {
@@ -3722,12 +3925,38 @@ export type GetMenuQuery = {
     category_id: any
     name: string
     description: string
+    ingredients: string
     price: any
+    calories?: any | null
+    allergens: any
     image_url: string
     is_available: boolean
     created_at: any
     updated_at: any
   }>
+}
+
+export type GetMenuItemByIdQueryVariables = Exact<{
+  id: Scalars["uuid"]["input"]
+}>
+
+export type GetMenuItemByIdQuery = {
+  __typename?: "query_root"
+  menu_items_by_pk?: {
+    __typename?: "menu_items"
+    id: any
+    category_id: any
+    name: string
+    description: string
+    ingredients: string
+    price: any
+    calories?: any | null
+    allergens: any
+    image_url: string
+    is_available: boolean
+    created_at: any
+    updated_at: any
+  } | null
 }
 
 export type GetOrdersQueryVariables = Exact<{ [key: string]: never }>
@@ -3766,6 +3995,65 @@ export type GetLiveOrdersSubscription = {
   }>
 }
 
+export const AddToCartDocument = gql`
+  mutation AddToCart($user_id: uuid!, $menu_item_id: uuid!, $quantity: Int!) {
+    insert_cart_one(
+      object: {
+        user_id: $user_id
+        menu_item_id: $menu_item_id
+        quantity: $quantity
+      }
+    ) {
+      menu_item {
+        name
+      }
+    }
+  }
+`
+export type AddToCartMutationFn = Apollo.MutationFunction<
+  AddToCartMutation,
+  AddToCartMutationVariables
+>
+
+/**
+ * __useAddToCartMutation__
+ *
+ * To run a mutation, you first call `useAddToCartMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddToCartMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addToCartMutation, { data, loading, error }] = useAddToCartMutation({
+ *   variables: {
+ *      user_id: // value for 'user_id'
+ *      menu_item_id: // value for 'menu_item_id'
+ *      quantity: // value for 'quantity'
+ *   },
+ * });
+ */
+export function useAddToCartMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    AddToCartMutation,
+    AddToCartMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<AddToCartMutation, AddToCartMutationVariables>(
+    AddToCartDocument,
+    options
+  )
+}
+export type AddToCartMutationHookResult = ReturnType<
+  typeof useAddToCartMutation
+>
+export type AddToCartMutationResult = Apollo.MutationResult<AddToCartMutation>
+export type AddToCartMutationOptions = Apollo.BaseMutationOptions<
+  AddToCartMutation,
+  AddToCartMutationVariables
+>
 export const CreateOrderDocument = gql`
   mutation CreateOrder(
     $user_id: uuid!
@@ -3909,6 +4197,203 @@ export type CreateOrderItemsMutationOptions = Apollo.BaseMutationOptions<
   CreateOrderItemsMutation,
   CreateOrderItemsMutationVariables
 >
+export const DeleteCartItemDocument = gql`
+  mutation DeleteCartItem($id: uuid!) {
+    delete_cart_by_pk(id: $id) {
+      id
+    }
+  }
+`
+export type DeleteCartItemMutationFn = Apollo.MutationFunction<
+  DeleteCartItemMutation,
+  DeleteCartItemMutationVariables
+>
+
+/**
+ * __useDeleteCartItemMutation__
+ *
+ * To run a mutation, you first call `useDeleteCartItemMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCartItemMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCartItemMutation, { data, loading, error }] = useDeleteCartItemMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteCartItemMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteCartItemMutation,
+    DeleteCartItemMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    DeleteCartItemMutation,
+    DeleteCartItemMutationVariables
+  >(DeleteCartItemDocument, options)
+}
+export type DeleteCartItemMutationHookResult = ReturnType<
+  typeof useDeleteCartItemMutation
+>
+export type DeleteCartItemMutationResult =
+  Apollo.MutationResult<DeleteCartItemMutation>
+export type DeleteCartItemMutationOptions = Apollo.BaseMutationOptions<
+  DeleteCartItemMutation,
+  DeleteCartItemMutationVariables
+>
+export const UpdateCartItemDocument = gql`
+  mutation UpdateCartItem($id: uuid!, $quantity: Int!) {
+    update_cart_by_pk(pk_columns: { id: $id }, _set: { quantity: $quantity }) {
+      id
+      quantity
+    }
+  }
+`
+export type UpdateCartItemMutationFn = Apollo.MutationFunction<
+  UpdateCartItemMutation,
+  UpdateCartItemMutationVariables
+>
+
+/**
+ * __useUpdateCartItemMutation__
+ *
+ * To run a mutation, you first call `useUpdateCartItemMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCartItemMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateCartItemMutation, { data, loading, error }] = useUpdateCartItemMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      quantity: // value for 'quantity'
+ *   },
+ * });
+ */
+export function useUpdateCartItemMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateCartItemMutation,
+    UpdateCartItemMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    UpdateCartItemMutation,
+    UpdateCartItemMutationVariables
+  >(UpdateCartItemDocument, options)
+}
+export type UpdateCartItemMutationHookResult = ReturnType<
+  typeof useUpdateCartItemMutation
+>
+export type UpdateCartItemMutationResult =
+  Apollo.MutationResult<UpdateCartItemMutation>
+export type UpdateCartItemMutationOptions = Apollo.BaseMutationOptions<
+  UpdateCartItemMutation,
+  UpdateCartItemMutationVariables
+>
+export const GetUserCartDocument = gql`
+  query GetUserCart($user_id: uuid!) {
+    cart(where: { user_id: { _eq: $user_id } }) {
+      id
+      quantity
+      added_at
+      user {
+        id
+        name
+        email
+      }
+      menu_item {
+        id
+        name
+        description
+        price
+        image_url
+        is_available
+      }
+    }
+  }
+`
+
+/**
+ * __useGetUserCartQuery__
+ *
+ * To run a query within a React component, call `useGetUserCartQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserCartQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserCartQuery({
+ *   variables: {
+ *      user_id: // value for 'user_id'
+ *   },
+ * });
+ */
+export function useGetUserCartQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetUserCartQuery,
+    GetUserCartQueryVariables
+  > &
+    (
+      | { variables: GetUserCartQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetUserCartQuery, GetUserCartQueryVariables>(
+    GetUserCartDocument,
+    options
+  )
+}
+export function useGetUserCartLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetUserCartQuery,
+    GetUserCartQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetUserCartQuery, GetUserCartQueryVariables>(
+    GetUserCartDocument,
+    options
+  )
+}
+export function useGetUserCartSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetUserCartQuery,
+        GetUserCartQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions }
+  return Apollo.useSuspenseQuery<GetUserCartQuery, GetUserCartQueryVariables>(
+    GetUserCartDocument,
+    options
+  )
+}
+export type GetUserCartQueryHookResult = ReturnType<typeof useGetUserCartQuery>
+export type GetUserCartLazyQueryHookResult = ReturnType<
+  typeof useGetUserCartLazyQuery
+>
+export type GetUserCartSuspenseQueryHookResult = ReturnType<
+  typeof useGetUserCartSuspenseQuery
+>
+export type GetUserCartQueryResult = Apollo.QueryResult<
+  GetUserCartQuery,
+  GetUserCartQueryVariables
+>
 export const GetMenuDocument = gql`
   query GetMenu {
     menu_items {
@@ -3916,7 +4401,10 @@ export const GetMenuDocument = gql`
       category_id
       name
       description
+      ingredients
       price
+      calories
+      allergens
       image_url
       is_available
       created_at
@@ -3980,6 +4468,99 @@ export type GetMenuSuspenseQueryHookResult = ReturnType<
 export type GetMenuQueryResult = Apollo.QueryResult<
   GetMenuQuery,
   GetMenuQueryVariables
+>
+export const GetMenuItemByIdDocument = gql`
+  query GetMenuItemById($id: uuid!) {
+    menu_items_by_pk(id: $id) {
+      id
+      category_id
+      name
+      description
+      ingredients
+      price
+      calories
+      allergens
+      image_url
+      is_available
+      created_at
+      updated_at
+    }
+  }
+`
+
+/**
+ * __useGetMenuItemByIdQuery__
+ *
+ * To run a query within a React component, call `useGetMenuItemByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMenuItemByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMenuItemByIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetMenuItemByIdQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetMenuItemByIdQuery,
+    GetMenuItemByIdQueryVariables
+  > &
+    (
+      | { variables: GetMenuItemByIdQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetMenuItemByIdQuery, GetMenuItemByIdQueryVariables>(
+    GetMenuItemByIdDocument,
+    options
+  )
+}
+export function useGetMenuItemByIdLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetMenuItemByIdQuery,
+    GetMenuItemByIdQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    GetMenuItemByIdQuery,
+    GetMenuItemByIdQueryVariables
+  >(GetMenuItemByIdDocument, options)
+}
+export function useGetMenuItemByIdSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetMenuItemByIdQuery,
+        GetMenuItemByIdQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions }
+  return Apollo.useSuspenseQuery<
+    GetMenuItemByIdQuery,
+    GetMenuItemByIdQueryVariables
+  >(GetMenuItemByIdDocument, options)
+}
+export type GetMenuItemByIdQueryHookResult = ReturnType<
+  typeof useGetMenuItemByIdQuery
+>
+export type GetMenuItemByIdLazyQueryHookResult = ReturnType<
+  typeof useGetMenuItemByIdLazyQuery
+>
+export type GetMenuItemByIdSuspenseQueryHookResult = ReturnType<
+  typeof useGetMenuItemByIdSuspenseQuery
+>
+export type GetMenuItemByIdQueryResult = Apollo.QueryResult<
+  GetMenuItemByIdQuery,
+  GetMenuItemByIdQueryVariables
 >
 export const GetOrdersDocument = gql`
   query GetOrders {

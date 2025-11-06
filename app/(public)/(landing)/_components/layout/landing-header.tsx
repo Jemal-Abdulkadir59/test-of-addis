@@ -4,6 +4,8 @@ import { useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { useParams, usePathname } from "next/navigation"
+import { useGetUserCartQuery } from "@/generated/graphql"
+import { getSession } from "next-auth/react"
 import { LogIn, ShoppingCart } from "lucide-react"
 
 // import type { LocaleType } from "@/types"
@@ -24,10 +26,28 @@ export function LandingHeader() {
   const params = useParams()
   const [fullPathname, setFullPathname] = useState("")
   const [isCartOpen, setIsCartOpen] = useState(false)
+  const [userId, setUserId] = useState<string | null>(null)
 
   useEffect(() => {
     setFullPathname(pathname + window.location.hash)
   }, [params, pathname])
+
+  useEffect(() => {
+    ;(async () => {
+      const session = await getSession()
+      if (session?.user?.id) {
+        setUserId(session.user.id)
+      }
+    })()
+  }, [])
+
+  //Query cart items from backend when ready
+  const { data, loading, error, refetch } = useGetUserCartQuery({
+    variables: { user_id: userId! },
+    skip: !userId, // 🚫 skip until userId is ready
+  })
+
+  const cartItems = data?.cart || []
 
   return (
     <header className="sticky top-0 z-50 w-full bg-background border-b border-sidebar-border">
@@ -73,12 +93,14 @@ export function LandingHeader() {
             onClick={() => setIsCartOpen(true)}
           >
             <ShoppingCart className="h-5 w-5" />
-            <Badge
-              variant="destructive"
-              className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs"
-            >
-              2
-            </Badge>
+            {cartItems.length > 0 && (
+              <Badge
+                variant="destructive"
+                className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs"
+              >
+                {cartItems.length}
+              </Badge>
+            )}
           </Button>
           <ModeDropdown />
           {/* <LanguageDropdown dictionary={dictionary} /> */}
@@ -91,14 +113,15 @@ export function LandingHeader() {
           </Link>
         </div>
       </div>
-      <CartSheet
-        open={isCartOpen}
-        onOpenChange={setIsCartOpen}
-        items={[]}
-        onUpdateQuantity={() => {}}
-        onRemoveItem={() => {}}
-        onCheckout={() => {}}
-      />
+      {isCartOpen && (
+        <CartSheet
+          open={isCartOpen}
+          onOpenChange={setIsCartOpen}
+          cartItems={cartItems}
+          loading={loading}
+          onCheckout={() => {}}
+        />
+      )}
     </header>
   )
 }

@@ -1,0 +1,6 @@
+mutation UpdateCartItem($id: uuid!, $quantity: Int!) {
+  update_cart_by_pk(pk_columns: { id: $id }, _set: { quantity: $quantity }) {
+    id
+    quantity
+  }
+}

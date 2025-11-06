@@ -1,4 +1,4 @@
-// lib/apolloClient.ts
+// graphql/client.ts apollo client setup with auth link for NextAuth.js
 import {
   ApolloClient,
   ApolloLink,

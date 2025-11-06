@@ -1,0 +1,23 @@
+query GetUserCart($user_id: uuid!) {
+  cart(where: { user_id: { _eq: $user_id } }) {
+    id
+    quantity
+    added_at
+
+    # nested data
+    user {
+      id
+      name
+      email
+    }
+
+    menu_item {
+      id
+      name
+      description
+      price
+      image_url
+      is_available
+    }
+  }
+}

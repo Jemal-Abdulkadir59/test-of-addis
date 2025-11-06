@@ -1,10 +1,15 @@
 "use client"
 
 import { useState } from "react"
-import { useGetMenuQuery } from "@/generated/graphql"
+import { usePathname, useRouter } from "next/navigation"
+import {
+  useAddToCartMutation,
+  useGetMenuQuery,
+  useGetUserCartQuery,
+} from "@/generated/graphql"
+import { getSession } from "next-auth/react"
 
 import { useToast } from "@/hooks/use-toast"
-import { Skeleton } from "@/components/ui/skeleton"
 import { CartItem } from "./_components/cart"
 // import CartSheet from "./_components/cart-sheet"
 import CategoryTabs from "./_components/category-tabs"
@@ -13,7 +18,6 @@ import HeroSection from "./_components/hero-section"
 import OfferCard from "./_components/offer-card"
 import OfferDetail from "./_components/offer-detail"
 import ProductCard from "./_components/product-card"
-import ProductDetail from "./_components/product-detail"
 import CategoryTabsSkeleton from "@/components/skeleton/categoryTabsSkeleton"
 import ProductCardSkeleton from "@/components/skeleton/productCardSkeleton"
 import { SpecialOffersSkeleton } from "@/components/skeleton/specialOffersSkeleton"
@@ -22,9 +26,8 @@ const Index = () => {
   const { toast } = useToast()
 
   const [selectedOffer, setSelectedOffer] = useState<any>(null)
-  const [selectedProduct, setSelectedProduct] = useState<any>(null)
-  const [cartItems, setCartItems] = useState<CartItem[]>([])
-  // const [isCartOpen, setIsCartOpen] = useState(false)
+  const router = useRouter()
+  const pathname = usePathname()
 
   const offers = [
     {
@@ -77,99 +80,62 @@ const Index = () => {
     },
   ]
 
-  const products = [
-    {
-      id: 1,
-      image: "/img/gallery/meal-small.jpg",
-      title: "The classics for 3",
-      description:
-        "McDonald's big tasty - Royal Cheeseburger 3 medium fries | Fries, Pepsi, 3 cold drinks",
-      price: "21.10",
-      ingredients:
-        "Premium beef patty, sesame seed bun, cheddar cheese, lettuce, tomato, onions, pickles, special sauce",
-      calories: "850",
-      allergens: ["Gluten", "Dairy", "Eggs", "Soy"],
-    },
-    {
-      id: 2,
-      image: "/img/meals/cookie.jpg",
-      title: "The classics for 3",
-      description:
-        "McDonald's big tasty - Royal Cheeseburger 3 medium fries | Fries, Pepsi, 3 cold drinks",
-      price: "21.10",
-      ingredients:
-        "Premium beef patty, sesame seed bun, cheddar cheese, lettuce, tomato, onions, pickles, special sauce",
-      calories: "850",
-      allergens: ["Gluten", "Dairy", "Eggs", "Soy"],
-    },
-    {
-      id: 3,
-      image: "/img/meals/meal-3.jpg",
-      title: "Royal Cheese Burger with extra Fries",
-      description:
-        "Royal Cheeseburger 3 medium fries | Fries, Pepsi, 3 cold drinks",
-      price: "21.10",
-      ingredients:
-        "Quarter pound beef patty, sesame seed bun, double cheddar cheese, lettuce, onions, pickles, ketchup, mustard",
-      calories: "720",
-      allergens: ["Gluten", "Dairy", "Soy"],
-    },
-    {
-      id: 4,
-      image: "/img/meals/meal-4.jpg",
-      title: "The classics for 3",
-      description:
-        "McDonald's big tasty - Royal Cheeseburger 3 medium fries | Fries, Pepsi, 3 cold drinks",
-      price: "34.10",
-      ingredients:
-        "Premium beef patty, sesame seed bun, cheddar cheese, lettuce, tomato, onions, pickles, special sauce",
-      calories: "850",
-      allergens: ["Gluten", "Dairy", "Eggs", "Soy"],
-    },
-    {
-      id: 5,
-      image: "/img/meals/meal-5.jpg",
-      title: "The classics for 3",
-      description:
-        "McDonald's big tasty - Royal Cheeseburger 3 medium fries | Fries, Pepsi, 3 cold drinks",
-      price: "21.10",
-      ingredients:
-        "Premium beef patty, sesame seed bun, cheddar cheese, lettuce, tomato, onions, pickles, special sauce",
-      calories: "850",
-      allergens: ["Gluten", "Dairy", "Eggs", "Soy"],
-    },
-    {
-      id: 6,
-      image: "/img/meals/meal-6.jpg",
-      title: "The classics for 3",
-      description:
-        "McDonald's big tasty - Royal Cheeseburger 3 medium fries | Fries, Pepsi, 3 cold drinks",
-      price: "21.10",
-      ingredients:
-        "Premium beef patty, sesame seed bun, cheddar cheese, lettuce, tomato, onions, pickles, special sauce",
-      calories: "850",
-      allergens: ["Gluten", "Dairy", "Eggs", "Soy"],
-    },
-  ]
+  //# Query to fetch menu items
+  const { data: products, loading, error } = useGetMenuQuery()
 
-  // Query Data
+  //# Mutation to add item to cart
+  const [
+    addToCart,
+    { data: addToCartData, loading: loadingAddToCart, error: errorAddToCart },
+  ] = useAddToCartMutation({
+    refetchQueries: ["GetUserCart"],
+    awaitRefetchQueries: true,
+  })
 
-  const handleAddToCart = (item: any, quantity: number) => {
-    const newItem: CartItem = {
-      id: `${item.type}-${Date.now()}-${Math.random()}`,
-      type: item.type,
-      image: item.image,
-      title: item.title,
-      price: item.price,
-      quantity,
-      discount: item.discount,
+  const handleAddToCart = async (menuItemId: string, quantity: number) => {
+    const session = await getSession()
+
+    if (!session) {
+      return router.push(`/auth/sign-in?redirectTo=${pathname}`)
     }
 
-    setCartItems([...cartItems, newItem])
-    toast({
-      title: "Added to cart",
-      description: `${item.title} has been added to your cart.`,
-    })
+    try {
+      const result = await addToCart({
+        variables: {
+          user_id: session.user.id,
+          menu_item_id: menuItemId,
+          quantity: quantity,
+        },
+      })
+
+      const itemName = result.data?.insert_cart_one?.menu_item?.name
+
+      toast({
+        title: "Added to cart",
+        description: `${itemName} has been added to your cart.`,
+      })
+    } catch (error: any) {
+      console.error("Add to cart error:", error)
+
+      // Extract error message from GraphQL error
+      const message = error?.message || ""
+      if (
+        message.includes("Uniqueness violation") ||
+        message.includes("duplicate key value")
+      ) {
+        toast({
+          title: "Item already in cart",
+          description: "This item is already in your cart.",
+          variant: "destructive",
+        })
+      } else {
+        toast({
+          title: "Failed to add item to cart",
+          description: "Something went wrong. Please try again.",
+          variant: "destructive",
+        })
+      }
+    }
   }
 
   const handleOfferClick = (offer: any) => {
@@ -183,10 +149,6 @@ const Index = () => {
       }
     }, 100) // small delay ensures OfferDetail is mounted
   }
-
-  const { data, loading, error } = useGetMenuQuery()
-
-  console.log("Menu Data:", data, loading, error)
 
   return (
     <div className="min-h-screen">
@@ -228,43 +190,32 @@ const Index = () => {
           <section>
             <h2 className="text-3xl font-bold mb-6">Foods</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {products.map((product) => (
+              {products?.menu_items.map((product: any) => (
                 <ProductCard
                   key={product.id}
                   {...product}
-                  image={product.image}
-                  onClick={() => setSelectedProduct(product)}
                   onAddToCart={handleAddToCart}
+                  loadingAddToCart={loadingAddToCart}
                 />
               ))}
             </div>
           </section>
         )}
       </main>
-
-      {/* <CartSheet
-        open={isCartOpen}
-        onOpenChange={setIsCartOpen}
-        items={cartItems}
-        onUpdateQuantity={handleUpdateQuantity}
-        onRemoveItem={handleRemoveItem}
-        onCheckout={handleCheckout}
-      /> */}
-
-      {selectedProduct && (
-        <ProductDetail
-          open={!!selectedProduct}
-          onOpenChange={(open) => !open && setSelectedProduct(null)}
-          {...selectedProduct}
-          onAddToCart={handleAddToCart}
-        />
-      )}
     </div>
   )
 }
 
 export default Index
 
+//  {selectedProduct && (
+//         <ProductDetail
+//           open={!!selectedProduct}
+//           onOpenChange={(open) => !open && setSelectedProduct(null)}
+//           {...selectedProduct}
+//           onAddToCart={handleAddToCart}
+//         />
+//       )}
 // const handleUpdateQuantity = (id: string, quantity: number) => {
 //   setCartItems(
 //     cartItems.map((item) => (item.id === id ? { ...item, quantity } : item))
@@ -290,3 +241,78 @@ export default Index
 //   }
 //   navigate("/checkout", { state: { cartItems } })
 // }
+
+// const products = [
+//   {
+//     id: 1,
+//     image: "/img/gallery/meal-small.jpg",
+//     title: "The classics for 3",
+//     description:
+//       "McDonald's big tasty - Royal Cheeseburger 3 medium fries | Fries, Pepsi, 3 cold drinks",
+//     price: "21.10",
+//     ingredients:
+//       "Premium beef patty, sesame seed bun, cheddar cheese, lettuce, tomato, onions, pickles, special sauce",
+//     calories: "850",
+//     allergens: ["Gluten", "Dairy", "Eggs", "Soy"],
+//   },
+//   {
+//     id: 2,
+//     image: "/img/meals/cookie.jpg",
+//     title: "The classics for 3",
+//     description:
+//       "McDonald's big tasty - Royal Cheeseburger 3 medium fries | Fries, Pepsi, 3 cold drinks",
+//     price: "21.10",
+//     ingredients:
+//       "Premium beef patty, sesame seed bun, cheddar cheese, lettuce, tomato, onions, pickles, special sauce",
+//     calories: "850",
+//     allergens: ["Gluten", "Dairy", "Eggs", "Soy"],
+//   },
+//   {
+//     id: 3,
+//     image: "/img/meals/meal-3.jpg",
+//     title: "Royal Cheese Burger with extra Fries",
+//     description:
+//       "Royal Cheeseburger 3 medium fries | Fries, Pepsi, 3 cold drinks",
+//     price: "21.10",
+//     ingredients:
+//       "Quarter pound beef patty, sesame seed bun, double cheddar cheese, lettuce, onions, pickles, ketchup, mustard",
+//     calories: "720",
+//     allergens: ["Gluten", "Dairy", "Soy"],
+//   },
+//   {
+//     id: 4,
+//     image: "/img/meals/meal-4.jpg",
+//     title: "The classics for 3",
+//     description:
+//       "McDonald's big tasty - Royal Cheeseburger 3 medium fries | Fries, Pepsi, 3 cold drinks",
+//     price: "34.10",
+//     ingredients:
+//       "Premium beef patty, sesame seed bun, cheddar cheese, lettuce, tomato, onions, pickles, special sauce",
+//     calories: "850",
+//     allergens: ["Gluten", "Dairy", "Eggs", "Soy"],
+//   },
+//   {
+//     id: 5,
+//     image: "/img/meals/meal-5.jpg",
+//     title: "The classics for 3",
+//     description:
+//       "McDonald's big tasty - Royal Cheeseburger 3 medium fries | Fries, Pepsi, 3 cold drinks",
+//     price: "21.10",
+//     ingredients:
+//       "Premium beef patty, sesame seed bun, cheddar cheese, lettuce, tomato, onions, pickles, special sauce",
+//     calories: "850",
+//     allergens: ["Gluten", "Dairy", "Eggs", "Soy"],
+//   },
+//   {
+//     id: 6,
+//     image: "/img/meals/meal-6.jpg",
+//     title: "The classics for 3",
+//     description:
+//       "McDonald's big tasty - Royal Cheeseburger 3 medium fries | Fries, Pepsi, 3 cold drinks",
+//     price: "21.10",
+//     ingredients:
+//       "Premium beef patty, sesame seed bun, cheddar cheese, lettuce, tomato, onions, pickles, special sauce",
+//     calories: "850",
+//     allergens: ["Gluten", "Dairy", "Eggs", "Soy"],
+//   },
+// ]

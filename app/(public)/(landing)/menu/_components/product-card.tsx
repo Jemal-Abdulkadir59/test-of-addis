@@ -8,50 +8,48 @@ import { Card } from "@/components/ui/card"
 import ProductDetail from "./product-detail"
 
 interface ProductCardProps {
-  image: string
-  title: string
+  id: string
+  category_id: string
+  name: string
   description: string
+  ingredients: string
   price: string
-  ingredients?: string
+  image_url: string
+  is_available: boolean
   calories?: string
   allergens?: string[]
-  onClick?: () => void
+  loadingAddToCart?: boolean
+  // onClick?: () => void
   onAddToCart?: (item: any, quantity: number) => void
 }
 
 const ProductCard = ({
-  image,
-  title,
+  id,
+  name,
+  image_url: image,
   description,
   price,
   ingredients,
+  is_available,
   calories,
   allergens,
-  onClick,
+  loadingAddToCart,
   onAddToCart,
 }: ProductCardProps) => {
   const [detailOpen, setDetailOpen] = useState(false)
+  const [selectedProduct, setSelectedProduct] = useState<any>(null)
 
-  const handleCardClick = () => {
-    if (onClick) {
-      onClick()
-    } else {
-      setDetailOpen(true)
-    }
+  const handleCardClick = (e: React.MouseEvent, id: string) => {
+    e.stopPropagation()
+    if (id) setSelectedProduct(id)
+    setDetailOpen(true)
   }
 
-  const handleAddToCart = (e: React.MouseEvent) => {
+  const handleAddToCart = (e: React.MouseEvent, id: string) => {
     e.stopPropagation()
+
     if (onAddToCart) {
-      onAddToCart(
-        {
-          type: "product",
-          image,
-          title,
-          price,
-        },
-        1
-      )
+      onAddToCart(id, 1)
     } else {
       setDetailOpen(true)
     }
@@ -61,50 +59,48 @@ const ProductCard = ({
     <>
       <Card
         className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
-        onClick={handleCardClick}
+        onClick={(e) => handleCardClick(e, id)}
       >
         <div className="grid md:grid-cols-2 gap-4 p-4">
           <div className="flex flex-col justify-between">
             <div>
-              <h3 className="font-semibold text-lg mb-2">{title}</h3>
+              <h3 className="font-semibold text-lg mb-2">{name}</h3>
               <p className="text-sm text-muted-foreground mb-4">
                 {description}
               </p>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-xl font-bold">GBP {price}</span>
+              <span className="text-xl font-bold">ETB {price}</span>
               <Button
                 size="icon"
                 variant="default"
                 className="rounded-full"
-                onClick={handleAddToCart}
+                disabled={!is_available || loadingAddToCart}
+                onClick={(e) => handleAddToCart(e, id)}
               >
                 <Plus className="h-4 w-4" />
               </Button>
             </div>
           </div>
-          <div className="aspect-[3/4] overflow-hidden rounded-lg">
+          <div className="aspect-[4/4] overflow-hidden rounded-lg">
             <img
-              src={image}
-              alt={title}
+              src={`/img/menu_items/${image}`}
+              alt={name}
               className="w-full h-full object-cover rounded-lg"
             />
           </div>
         </div>
       </Card>
 
-      <ProductDetail
-        open={detailOpen}
-        onOpenChange={setDetailOpen}
-        image={image}
-        title={title}
-        description={description}
-        price={price}
-        ingredients={ingredients}
-        calories={calories}
-        allergens={allergens}
-        onAddToCart={onAddToCart}
-      />
+      {detailOpen && selectedProduct ? (
+        <ProductDetail
+          open={detailOpen}
+          onOpenChange={setDetailOpen}
+          selectedProduct={selectedProduct}
+          onAddToCart={onAddToCart}
+          loadingAddToCart={loadingAddToCart}
+        />
+      ) : null}
     </>
   )
 }

@@ -1,0 +1,5 @@
+mutation DeleteCartItem($id: uuid!) {
+  delete_cart_by_pk(id: $id) {
+    id
+  }
+}

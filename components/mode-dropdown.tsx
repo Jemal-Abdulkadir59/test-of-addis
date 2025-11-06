@@ -4,10 +4,7 @@ import { useCallback } from "react"
 import { useParams } from "next/navigation"
 import { MoonStar, Sun, SunMoon } from "lucide-react"
 
-import type { DictionaryType } from "@/lib/get-dictionary"
 import type { LocaleType, ModeType } from "@/types"
-
-
 
 import { useSettings } from "@/hooks/use-settings"
 import { Button } from "@/components/ui/button"
@@ -32,7 +29,7 @@ export function ModeDropdown() {
   const params = useParams()
 
   const locale = params.lang as LocaleType
-  
+
   const mode = settings.mode
   const ModeIcon = modeIcons[mode]
 
@@ -44,7 +41,7 @@ export function ModeDropdown() {
   )
 
   return (
-    <DropdownMenu >
+    <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon" aria-label="Mode">
           <ModeIcon className="size-4" />

@@ -1,5 +1,5 @@
-query GetMenu {
-  menu_items {
+query GetMenuItemById($id: uuid!) {
+  menu_items_by_pk(id: $id) {
     id
     category_id
     name

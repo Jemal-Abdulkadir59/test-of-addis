@@ -1,0 +1,14 @@
+mutation AddToCart($user_id: uuid!, $menu_item_id: uuid!, $quantity: Int!) {
+  insert_cart_one(
+    object: {
+      user_id: $user_id
+      menu_item_id: $menu_item_id
+      quantity: $quantity
+    }
+  ) {
+    # fetch related users & menu data directly
+    menu_item {
+      name
+    }
+  }
+}
