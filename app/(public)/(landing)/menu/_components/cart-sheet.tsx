@@ -1,5 +1,8 @@
 import React from "react"
-import { useDeleteCartItemMutation } from "@/generated/graphql"
+import {
+  useDeleteCartItemMutation,
+  useUpdateCartItemMutation,
+} from "@/generated/graphql"
 import { Minus, Plus, X } from "lucide-react"
 
 import { toast } from "@/hooks/use-toast"
@@ -56,7 +59,9 @@ const CartSheet = ({
       refetchQueries: ["GetUserCart"],
       awaitRefetchQueries: true,
     })
+  const [updateCartItem] = useUpdateCartItemMutation()
 
+  // Delete item from cart
   const onRemoveItem = async (id: string, name: string) => {
     try {
       const res = await deleteCartItem({
@@ -86,7 +91,39 @@ const CartSheet = ({
     }
   }
 
-  const onUpdateQuantity = (id: string, quantity: number) => {}
+  // Update item from cart
+  const onUpdateQuantity = async (
+    id: string,
+    quantity: number,
+    name: string
+  ) => {
+    try {
+      if (quantity <= 0) {
+        const res = await deleteCartItem({
+          variables: { id },
+        })
+
+        if (res.data?.delete_cart_by_pk?.id) {
+          toast({
+            title: "Removed from cart",
+            description: `${name} has been deleted successfully.`,
+            variant: "default",
+          })
+        }
+      } else {
+        await updateCartItem({
+          variables: { id, quantity },
+        })
+      }
+    } catch (err) {
+      console.error(err)
+      toast({
+        title: "Error",
+        description: "Failed to update cart",
+        variant: "destructive",
+      })
+    }
+  }
 
   const subtotal = cartItems?.reduce(
     (sum, item) => sum + parseFloat(item.menu_item.price) * item.quantity,
@@ -164,7 +201,8 @@ const CartSheet = ({
                           onClick={() =>
                             onUpdateQuantity(
                               item.id,
-                              Math.max(1, item.quantity - 1)
+                              item.quantity - 1,
+                              item.menu_item.name
                             )
                           }
                         >
@@ -178,7 +216,11 @@ const CartSheet = ({
                           size="icon"
                           className="h-7 w-7"
                           onClick={() =>
-                            onUpdateQuantity(item.id, item.quantity + 1)
+                            onUpdateQuantity(
+                              item.id,
+                              item.quantity + 1,
+                              item.menu_item.name
+                            )
                           }
                         >
                           <Plus className="h-3 w-3" />
