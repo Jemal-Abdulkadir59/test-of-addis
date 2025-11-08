@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import {
   useAddToCartMutation,
@@ -24,7 +24,7 @@ import { SpecialOffersSkeleton } from "@/components/skeleton/specialOffersSkelet
 
 const Index = () => {
   const { toast } = useToast()
-
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [selectedOffer, setSelectedOffer] = useState<any>(null)
   const router = useRouter()
   const pathname = usePathname()
@@ -82,6 +82,15 @@ const Index = () => {
 
   //# Query to fetch menu items
   const { data: products, loading, error } = useGetMenuQuery()
+
+  // ✅ UseMemo prevents recalculation every render
+  const filteredProducts = useMemo(() => {
+    if (!products?.menu_items) return []
+    if (!selectedCategory) return products.menu_items
+    return products.menu_items.filter(
+      (item) => item.category_id === selectedCategory
+    )
+  }, [products, selectedCategory])
 
   //# Mutation to add item to cart
   const [
@@ -154,7 +163,11 @@ const Index = () => {
     <div className="min-h-screen">
       {/*<Header*/}
       <HeroSection isLoading={loading} />
-      {loading ? <CategoryTabsSkeleton /> : <CategoryTabs />}
+      {loading ? (
+        <CategoryTabsSkeleton />
+      ) : (
+        <CategoryTabs setSelectedCategory={setSelectedCategory} />
+      )}
 
       <main className="container mx-auto px-4 py-8">
         {selectedOffer && (
@@ -188,9 +201,9 @@ const Index = () => {
           ))
         ) : (
           <section>
-            <h2 className="text-3xl font-bold mb-6">Foods</h2>
+            <h2 className="text-3xl font-bold mb-6">Menu</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {products?.menu_items.map((product: any) => (
+              {filteredProducts?.map((product: any) => (
                 <ProductCard
                   key={product.id}
                   {...product}

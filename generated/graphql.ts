@@ -3959,6 +3959,20 @@ export type GetMenuItemByIdQuery = {
   } | null
 }
 
+export type GetMenuCategoriesQueryVariables = Exact<{ [key: string]: never }>
+
+export type GetMenuCategoriesQuery = {
+  __typename?: "query_root"
+  menu_categories: Array<{
+    __typename?: "menu_categories"
+    id: any
+    name: string
+    description: string
+    image_url: string
+    created_at: any
+  }>
+}
+
 export type GetOrdersQueryVariables = Exact<{ [key: string]: never }>
 
 export type GetOrdersQuery = {
@@ -4561,6 +4575,87 @@ export type GetMenuItemByIdSuspenseQueryHookResult = ReturnType<
 export type GetMenuItemByIdQueryResult = Apollo.QueryResult<
   GetMenuItemByIdQuery,
   GetMenuItemByIdQueryVariables
+>
+export const GetMenuCategoriesDocument = gql`
+  query GetMenuCategories {
+    menu_categories {
+      id
+      name
+      description
+      image_url
+      created_at
+    }
+  }
+`
+
+/**
+ * __useGetMenuCategoriesQuery__
+ *
+ * To run a query within a React component, call `useGetMenuCategoriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMenuCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMenuCategoriesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetMenuCategoriesQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetMenuCategoriesQuery,
+    GetMenuCategoriesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<
+    GetMenuCategoriesQuery,
+    GetMenuCategoriesQueryVariables
+  >(GetMenuCategoriesDocument, options)
+}
+export function useGetMenuCategoriesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetMenuCategoriesQuery,
+    GetMenuCategoriesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    GetMenuCategoriesQuery,
+    GetMenuCategoriesQueryVariables
+  >(GetMenuCategoriesDocument, options)
+}
+export function useGetMenuCategoriesSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetMenuCategoriesQuery,
+        GetMenuCategoriesQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions }
+  return Apollo.useSuspenseQuery<
+    GetMenuCategoriesQuery,
+    GetMenuCategoriesQueryVariables
+  >(GetMenuCategoriesDocument, options)
+}
+export type GetMenuCategoriesQueryHookResult = ReturnType<
+  typeof useGetMenuCategoriesQuery
+>
+export type GetMenuCategoriesLazyQueryHookResult = ReturnType<
+  typeof useGetMenuCategoriesLazyQuery
+>
+export type GetMenuCategoriesSuspenseQueryHookResult = ReturnType<
+  typeof useGetMenuCategoriesSuspenseQuery
+>
+export type GetMenuCategoriesQueryResult = Apollo.QueryResult<
+  GetMenuCategoriesQuery,
+  GetMenuCategoriesQueryVariables
 >
 export const GetOrdersDocument = gql`
   query GetOrders {

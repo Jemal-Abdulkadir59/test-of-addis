@@ -1,0 +1,9 @@
+query GetMenuCategories {
+  menu_categories {
+    id
+    name
+    description
+    image_url
+    created_at
+  }
+}
