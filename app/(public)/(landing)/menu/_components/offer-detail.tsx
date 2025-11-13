@@ -1,7 +1,10 @@
 "use client"
 
 import { useState } from "react"
+import { useGetOfferByIdQuery } from "@/generated/graphql"
 import { Minus, Plus, X } from "lucide-react"
+
+import { formatCurrency, formatDate } from "@/lib/utils"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -9,52 +12,46 @@ import { Card } from "@/components/ui/card"
 import { OfferDetailSkeleton } from "@/components/skeleton/offerDetailSkeleton"
 
 interface OfferDetailProps {
-  image: string
-  title: string
-  discount: string
-  description: string
-  originalPrice: string
-  discountedPrice: string
-  validUntil?: string
-  terms?: string[]
+  selectedOffer: string
   onClose: () => void
   onAddToCart: (item: any, quantity: number) => void
 }
 
 const OfferDetail = ({
-  image,
-  title,
-  discount,
-  description,
-  originalPrice,
-  discountedPrice,
-  validUntil = "December 31, 2025",
-  terms = [
-    "Valid for first order only",
-    "Cannot be combined with other offers",
-    "Minimum order value may apply",
-  ],
+  selectedOffer,
   onClose,
   onAddToCart,
 }: OfferDetailProps) => {
   const [quantity, setQuantity] = useState(1)
 
-  const handleAddToCart = () => {
-    onAddToCart(
-      {
-        type: "offer",
-        image,
-        title,
-        price: discountedPrice,
-        discount,
-      },
-      quantity
-    )
+  const {
+    data: data,
+    loading: isLoadingOffers,
+    error,
+  } = useGetOfferByIdQuery({
+    variables: { id: selectedOffer },
+  })
+
+  const offerData = data?.special_offers_by_pk
+
+  const discount_percent = Math.round(
+    ((offerData?.menu_item?.price - offerData?.discount_price) /
+      offerData?.menu_item?.price) *
+      100
+  )
+  const discountLabel = `-${discount_percent}%`
+
+  const handleAddToCart = (e: React.MouseEvent, id: string) => {
+    e.stopPropagation()
+
+    if (onAddToCart) {
+      onAddToCart(id, quantity)
+    }
   }
-  const [isLoading, setIsLoading] = useState(false)
+
   return (
     <Card className="mb-8 overflow-hidden">
-      {isLoading ? (
+      {isLoadingOffers ? (
         <OfferDetailSkeleton />
       ) : (
         <div className="relative">
@@ -70,33 +67,42 @@ const OfferDetail = ({
           <div className="grid md:grid-cols-2 gap-6 p-6">
             <div className="relative">
               <img
-                src={image}
-                alt={title}
+                src={`/img/menu_items/${offerData?.menu_item?.image_url}`}
+                alt={offerData?.title}
                 className="w-full h-80 object-cover rounded-lg"
               />
               <Badge className="absolute top-3 right-3 bg-secondary text-secondary-foreground font-semibold text-lg px-4 py-2">
-                {discount}
+                {discountLabel}
               </Badge>
             </div>
 
             <div className="space-y-6">
               <div>
-                <h2 className="text-3xl font-bold mb-2">{title}</h2>
-                <p className="text-muted-foreground">{description}</p>
+                <h2 className="text-3xl font-bold mb-2">
+                  {offerData?.menu_item?.name}
+                </h2>
+                <p className="text-muted-foreground mb-2">
+                  {offerData?.description}
+                </p>
+                <p className="text-muted-foreground">
+                  {offerData?.menu_item?.description}
+                </p>
               </div>
 
               <div className="flex items-center gap-4">
                 <span className="text-3xl font-bold text-primary">
-                  GBP {discountedPrice}
+                  {formatCurrency(offerData?.discount_price, "en", "ETB")}
                 </span>
                 <span className="text-xl text-muted-foreground line-through">
-                  GBP {originalPrice}
+                  {formatCurrency(offerData?.menu_item?.price, "en", "ETB")}
                 </span>
               </div>
 
               <div>
                 <h3 className="font-semibold text-lg mb-2">Valid Until</h3>
-                <p className="text-muted-foreground">{validUntil}</p>
+                <p className="text-muted-foreground">
+                  {formatDate(offerData?.valid_until)}
+                </p>
               </div>
 
               <div>
@@ -104,7 +110,7 @@ const OfferDetail = ({
                   Terms & Conditions
                 </h3>
                 <ul className="space-y-1">
-                  {terms.map((term, index) => (
+                  {offerData?.terms?.map((term, index) => (
                     <li
                       key={index}
                       className="text-sm text-muted-foreground flex items-start"
@@ -137,9 +143,15 @@ const OfferDetail = ({
                   </Button>
                 </div>
 
-                <Button size="lg" className="gap-2" onClick={handleAddToCart}>
-                  Add to Cart - GBP{" "}
-                  {(parseFloat(discountedPrice) * quantity).toFixed(2)}
+                <Button
+                  size="lg"
+                  className="gap-2"
+                  onClick={(e) => handleAddToCart(e, offerData?.menu_item?.id)}
+                >
+                  Add to Cart - ETB{" "}
+                  {(parseFloat(offerData?.discount_price) * quantity).toFixed(
+                    2
+                  )}
                 </Button>
               </div>
             </div>

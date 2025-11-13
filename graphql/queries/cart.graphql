@@ -3,8 +3,8 @@ query GetUserCart($user_id: uuid!) {
     id
     quantity
     added_at
+    price_at_purchase
 
-    # nested data
     user {
       id
       name
@@ -18,6 +18,12 @@ query GetUserCart($user_id: uuid!) {
       price
       image_url
       is_available
+    }
+
+    special_offer {
+      id
+      discount_price
+      title
     }
   }
 }

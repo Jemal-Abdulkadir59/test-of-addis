@@ -1,6 +1,7 @@
 import React from "react"
 import {
   useDeleteCartItemMutation,
+  useGetSpecialOffersQuery,
   useUpdateCartItemMutation,
 } from "@/generated/graphql"
 import { Minus, Plus, X } from "lucide-react"
@@ -22,6 +23,7 @@ interface CartItem {
   id: any
   quantity: number
   added_at?: any
+  price_at_purchase: number
   user: {
     __typename?: "users" | undefined
     id: any
@@ -54,6 +56,15 @@ const CartSheet = ({
   loading,
   onCheckout,
 }: CartSheetProps) => {
+  // Query special offers Data
+  // const {
+  //   data: offersData,
+  //   loading: loadingOffers,
+  //   error: errorOffer,
+  // } = useGetSpecialOffersQuery()
+
+  // const specialOffers = offersData?.special_offers ?? []
+
   const [deleteCartItem, { loading: loadingDelete, error }] =
     useDeleteCartItemMutation({
       refetchQueries: ["GetUserCart"],
@@ -125,10 +136,13 @@ const CartSheet = ({
     }
   }
 
-  const subtotal = cartItems?.reduce(
-    (sum, item) => sum + parseFloat(item.menu_item.price) * item.quantity,
-    0
-  )
+  console.log(cartItems)
+  const subtotal =
+    cartItems?.reduce(
+      (sum, item) => sum + Number(item.price_at_purchase) * item.quantity,
+      0
+    ) ?? 0
+
   const deliveryFee = 2.99
   const total = subtotal + deliveryFee
 
@@ -229,7 +243,7 @@ const CartSheet = ({
                       <p className="text-lg font-semibold">
                         ETB
                         {(
-                          parseFloat(item.menu_item.price) * item.quantity
+                          Number(item.price_at_purchase) * item.quantity
                         ).toFixed(2)}
                       </p>
                     </div>
@@ -243,19 +257,19 @@ const CartSheet = ({
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Subtotal</span>
-                  <span>£{subtotal.toFixed(2)}</span>
+                  <span>ETB{subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Delivery Fee</span>
-                  <span>£{deliveryFee.toFixed(2)}</span>
+                  <span>ETB{deliveryFee.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-lg font-semibold">
                   <span>Total</span>
-                  <span>£{total.toFixed(2)}</span>
+                  <span>ETB{total.toFixed(2)}</span>
                 </div>
               </div>
               <Button className="w-full" size="lg" onClick={onCheckout}>
-                Proceed to Checkout (£{total.toFixed(2)})
+                Proceed to Checkout (ETB{total.toFixed(2)})
               </Button>
             </div>
           </div>

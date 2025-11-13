@@ -1,5 +1,10 @@
 import { clsx } from "clsx"
-import { format, formatDistanceToNow, intervalToDuration } from "date-fns"
+import {
+  format,
+  formatDistanceToNow,
+  intervalToDuration,
+  isValid,
+} from "date-fns"
 import { twMerge } from "tailwind-merge"
 import { z } from "zod"
 
@@ -118,8 +123,20 @@ export function formatPercent(value: number, locales: LocaleType = "en") {
   }).format(value)
 }
 
-export function formatDate(value: string | number | Date) {
-  return format(value, "PP")
+// export function formatDate(value: string | number | Date) {
+//   return format(value, "PP")
+// }
+
+// EDITED
+export function formatDate(
+  value: string | number | Date | null | undefined
+): string {
+  if (!value) return "N/A"
+
+  const date = new Date(value)
+  if (!isValid(date)) return "Invalid date"
+
+  return format(date, "PP")
 }
 
 export function formatRelativeDate(value?: string | number | Date) {

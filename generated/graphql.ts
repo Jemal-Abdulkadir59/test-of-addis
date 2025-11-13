@@ -70,6 +70,23 @@ export type LoginResponse = {
 }
 
 /** Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'. */
+export type String_Array_Comparison_Exp = {
+  /** is the array contained in the given array value */
+  _contained_in?: InputMaybe<Array<Scalars["String"]["input"]>>
+  /** does the array contain the given value */
+  _contains?: InputMaybe<Array<Scalars["String"]["input"]>>
+  _eq?: InputMaybe<Array<Scalars["String"]["input"]>>
+  _gt?: InputMaybe<Array<Scalars["String"]["input"]>>
+  _gte?: InputMaybe<Array<Scalars["String"]["input"]>>
+  _in?: InputMaybe<Array<Array<Scalars["String"]["input"]>>>
+  _is_null?: InputMaybe<Scalars["Boolean"]["input"]>
+  _lt?: InputMaybe<Array<Scalars["String"]["input"]>>
+  _lte?: InputMaybe<Array<Scalars["String"]["input"]>>
+  _neq?: InputMaybe<Array<Scalars["String"]["input"]>>
+  _nin?: InputMaybe<Array<Array<Scalars["String"]["input"]>>>
+}
+
+/** Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'. */
 export type String_Comparison_Exp = {
   _eq?: InputMaybe<Scalars["String"]["input"]>
   _gt?: InputMaybe<Scalars["String"]["input"]>
@@ -110,7 +127,11 @@ export type Cart = {
   /** An object relationship */
   menu_item: Menu_Items
   menu_item_id: Scalars["uuid"]["output"]
+  price_at_purchase: Scalars["numeric"]["output"]
   quantity: Scalars["Int"]["output"]
+  /** An object relationship */
+  special_offer?: Maybe<Special_Offers>
+  special_offer_id?: Maybe<Scalars["uuid"]["output"]>
   /** An object relationship */
   user: Users
   user_id: Scalars["uuid"]["output"]
@@ -148,6 +169,7 @@ export type Cart_Aggregate_FieldsCountArgs = {
 /** aggregate avg on columns */
 export type Cart_Avg_Fields = {
   __typename?: "cart_avg_fields"
+  price_at_purchase?: Maybe<Scalars["Float"]["output"]>
   quantity?: Maybe<Scalars["Float"]["output"]>
 }
 
@@ -160,7 +182,10 @@ export type Cart_Bool_Exp = {
   id?: InputMaybe<Uuid_Comparison_Exp>
   menu_item?: InputMaybe<Menu_Items_Bool_Exp>
   menu_item_id?: InputMaybe<Uuid_Comparison_Exp>
+  price_at_purchase?: InputMaybe<Numeric_Comparison_Exp>
   quantity?: InputMaybe<Int_Comparison_Exp>
+  special_offer?: InputMaybe<Special_Offers_Bool_Exp>
+  special_offer_id?: InputMaybe<Uuid_Comparison_Exp>
   user?: InputMaybe<Users_Bool_Exp>
   user_id?: InputMaybe<Uuid_Comparison_Exp>
 }
@@ -169,12 +194,13 @@ export type Cart_Bool_Exp = {
 export enum Cart_Constraint {
   /** unique or primary key constraint on columns "id" */
   CartPkey = "cart_pkey",
-  /** unique or primary key constraint on columns "user_id", "menu_item_id" */
-  CartUserIdMenuItemIdKey = "cart_user_id_menu_item_id_key",
+  /** unique or primary key constraint on columns "user_id", "special_offer_id", "menu_item_id" */
+  CartUserIdMenuItemIdSpecialOfferIdKey = "cart_user_id_menu_item_id_special_offer_id_key",
 }
 
 /** input type for incrementing numeric columns in table "cart" */
 export type Cart_Inc_Input = {
+  price_at_purchase?: InputMaybe<Scalars["numeric"]["input"]>
   quantity?: InputMaybe<Scalars["Int"]["input"]>
 }
 
@@ -184,7 +210,10 @@ export type Cart_Insert_Input = {
   id?: InputMaybe<Scalars["uuid"]["input"]>
   menu_item?: InputMaybe<Menu_Items_Obj_Rel_Insert_Input>
   menu_item_id?: InputMaybe<Scalars["uuid"]["input"]>
+  price_at_purchase?: InputMaybe<Scalars["numeric"]["input"]>
   quantity?: InputMaybe<Scalars["Int"]["input"]>
+  special_offer?: InputMaybe<Special_Offers_Obj_Rel_Insert_Input>
+  special_offer_id?: InputMaybe<Scalars["uuid"]["input"]>
   user?: InputMaybe<Users_Obj_Rel_Insert_Input>
   user_id?: InputMaybe<Scalars["uuid"]["input"]>
 }
@@ -195,7 +224,9 @@ export type Cart_Max_Fields = {
   added_at?: Maybe<Scalars["timestamptz"]["output"]>
   id?: Maybe<Scalars["uuid"]["output"]>
   menu_item_id?: Maybe<Scalars["uuid"]["output"]>
+  price_at_purchase?: Maybe<Scalars["numeric"]["output"]>
   quantity?: Maybe<Scalars["Int"]["output"]>
+  special_offer_id?: Maybe<Scalars["uuid"]["output"]>
   user_id?: Maybe<Scalars["uuid"]["output"]>
 }
 
@@ -205,7 +236,9 @@ export type Cart_Min_Fields = {
   added_at?: Maybe<Scalars["timestamptz"]["output"]>
   id?: Maybe<Scalars["uuid"]["output"]>
   menu_item_id?: Maybe<Scalars["uuid"]["output"]>
+  price_at_purchase?: Maybe<Scalars["numeric"]["output"]>
   quantity?: Maybe<Scalars["Int"]["output"]>
+  special_offer_id?: Maybe<Scalars["uuid"]["output"]>
   user_id?: Maybe<Scalars["uuid"]["output"]>
 }
 
@@ -231,7 +264,10 @@ export type Cart_Order_By = {
   id?: InputMaybe<Order_By>
   menu_item?: InputMaybe<Menu_Items_Order_By>
   menu_item_id?: InputMaybe<Order_By>
+  price_at_purchase?: InputMaybe<Order_By>
   quantity?: InputMaybe<Order_By>
+  special_offer?: InputMaybe<Special_Offers_Order_By>
+  special_offer_id?: InputMaybe<Order_By>
   user?: InputMaybe<Users_Order_By>
   user_id?: InputMaybe<Order_By>
 }
@@ -250,7 +286,11 @@ export enum Cart_Select_Column {
   /** column name */
   MenuItemId = "menu_item_id",
   /** column name */
+  PriceAtPurchase = "price_at_purchase",
+  /** column name */
   Quantity = "quantity",
+  /** column name */
+  SpecialOfferId = "special_offer_id",
   /** column name */
   UserId = "user_id",
 }
@@ -260,25 +300,30 @@ export type Cart_Set_Input = {
   added_at?: InputMaybe<Scalars["timestamptz"]["input"]>
   id?: InputMaybe<Scalars["uuid"]["input"]>
   menu_item_id?: InputMaybe<Scalars["uuid"]["input"]>
+  price_at_purchase?: InputMaybe<Scalars["numeric"]["input"]>
   quantity?: InputMaybe<Scalars["Int"]["input"]>
+  special_offer_id?: InputMaybe<Scalars["uuid"]["input"]>
   user_id?: InputMaybe<Scalars["uuid"]["input"]>
 }
 
 /** aggregate stddev on columns */
 export type Cart_Stddev_Fields = {
   __typename?: "cart_stddev_fields"
+  price_at_purchase?: Maybe<Scalars["Float"]["output"]>
   quantity?: Maybe<Scalars["Float"]["output"]>
 }
 
 /** aggregate stddev_pop on columns */
 export type Cart_Stddev_Pop_Fields = {
   __typename?: "cart_stddev_pop_fields"
+  price_at_purchase?: Maybe<Scalars["Float"]["output"]>
   quantity?: Maybe<Scalars["Float"]["output"]>
 }
 
 /** aggregate stddev_samp on columns */
 export type Cart_Stddev_Samp_Fields = {
   __typename?: "cart_stddev_samp_fields"
+  price_at_purchase?: Maybe<Scalars["Float"]["output"]>
   quantity?: Maybe<Scalars["Float"]["output"]>
 }
 
@@ -295,13 +340,16 @@ export type Cart_Stream_Cursor_Value_Input = {
   added_at?: InputMaybe<Scalars["timestamptz"]["input"]>
   id?: InputMaybe<Scalars["uuid"]["input"]>
   menu_item_id?: InputMaybe<Scalars["uuid"]["input"]>
+  price_at_purchase?: InputMaybe<Scalars["numeric"]["input"]>
   quantity?: InputMaybe<Scalars["Int"]["input"]>
+  special_offer_id?: InputMaybe<Scalars["uuid"]["input"]>
   user_id?: InputMaybe<Scalars["uuid"]["input"]>
 }
 
 /** aggregate sum on columns */
 export type Cart_Sum_Fields = {
   __typename?: "cart_sum_fields"
+  price_at_purchase?: Maybe<Scalars["numeric"]["output"]>
   quantity?: Maybe<Scalars["Int"]["output"]>
 }
 
@@ -314,7 +362,11 @@ export enum Cart_Update_Column {
   /** column name */
   MenuItemId = "menu_item_id",
   /** column name */
+  PriceAtPurchase = "price_at_purchase",
+  /** column name */
   Quantity = "quantity",
+  /** column name */
+  SpecialOfferId = "special_offer_id",
   /** column name */
   UserId = "user_id",
 }
@@ -331,18 +383,21 @@ export type Cart_Updates = {
 /** aggregate var_pop on columns */
 export type Cart_Var_Pop_Fields = {
   __typename?: "cart_var_pop_fields"
+  price_at_purchase?: Maybe<Scalars["Float"]["output"]>
   quantity?: Maybe<Scalars["Float"]["output"]>
 }
 
 /** aggregate var_samp on columns */
 export type Cart_Var_Samp_Fields = {
   __typename?: "cart_var_samp_fields"
+  price_at_purchase?: Maybe<Scalars["Float"]["output"]>
   quantity?: Maybe<Scalars["Float"]["output"]>
 }
 
 /** aggregate variance on columns */
 export type Cart_Variance_Fields = {
   __typename?: "cart_variance_fields"
+  price_at_purchase?: Maybe<Scalars["Float"]["output"]>
   quantity?: Maybe<Scalars["Float"]["output"]>
 }
 
@@ -1332,6 +1387,10 @@ export type Mutation_Root = {
   delete_reviews?: Maybe<Reviews_Mutation_Response>
   /** delete single row from the table: "reviews" */
   delete_reviews_by_pk?: Maybe<Reviews>
+  /** delete data from the table: "special_offers" */
+  delete_special_offers?: Maybe<Special_Offers_Mutation_Response>
+  /** delete single row from the table: "special_offers" */
+  delete_special_offers_by_pk?: Maybe<Special_Offers>
   /** delete data from the table: "users" */
   delete_users?: Maybe<Users_Mutation_Response>
   /** delete single row from the table: "users" */
@@ -1372,6 +1431,10 @@ export type Mutation_Root = {
   insert_reviews?: Maybe<Reviews_Mutation_Response>
   /** insert a single row into the table: "reviews" */
   insert_reviews_one?: Maybe<Reviews>
+  /** insert data into the table: "special_offers" */
+  insert_special_offers?: Maybe<Special_Offers_Mutation_Response>
+  /** insert a single row into the table: "special_offers" */
+  insert_special_offers_one?: Maybe<Special_Offers>
   /** insert data into the table: "users" */
   insert_users?: Maybe<Users_Mutation_Response>
   /** insert a single row into the table: "users" */
@@ -1436,6 +1499,14 @@ export type Mutation_Root = {
   update_reviews_by_pk?: Maybe<Reviews>
   /** update multiples rows of table: "reviews" */
   update_reviews_many?: Maybe<Array<Maybe<Reviews_Mutation_Response>>>
+  /** update data of the table: "special_offers" */
+  update_special_offers?: Maybe<Special_Offers_Mutation_Response>
+  /** update single row of the table: "special_offers" */
+  update_special_offers_by_pk?: Maybe<Special_Offers>
+  /** update multiples rows of table: "special_offers" */
+  update_special_offers_many?: Maybe<
+    Array<Maybe<Special_Offers_Mutation_Response>>
+  >
   /** update data of the table: "users" */
   update_users?: Maybe<Users_Mutation_Response>
   /** update single row of the table: "users" */
@@ -1531,6 +1602,16 @@ export type Mutation_RootDelete_ReviewsArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Reviews_By_PkArgs = {
+  id: Scalars["uuid"]["input"]
+}
+
+/** mutation root */
+export type Mutation_RootDelete_Special_OffersArgs = {
+  where: Special_Offers_Bool_Exp
+}
+
+/** mutation root */
+export type Mutation_RootDelete_Special_Offers_By_PkArgs = {
   id: Scalars["uuid"]["input"]
 }
 
@@ -1650,6 +1731,18 @@ export type Mutation_RootInsert_ReviewsArgs = {
 export type Mutation_RootInsert_Reviews_OneArgs = {
   object: Reviews_Insert_Input
   on_conflict?: InputMaybe<Reviews_On_Conflict>
+}
+
+/** mutation root */
+export type Mutation_RootInsert_Special_OffersArgs = {
+  objects: Array<Special_Offers_Insert_Input>
+  on_conflict?: InputMaybe<Special_Offers_On_Conflict>
+}
+
+/** mutation root */
+export type Mutation_RootInsert_Special_Offers_OneArgs = {
+  object: Special_Offers_Insert_Input
+  on_conflict?: InputMaybe<Special_Offers_On_Conflict>
 }
 
 /** mutation root */
@@ -1843,6 +1936,25 @@ export type Mutation_RootUpdate_Reviews_By_PkArgs = {
 /** mutation root */
 export type Mutation_RootUpdate_Reviews_ManyArgs = {
   updates: Array<Reviews_Updates>
+}
+
+/** mutation root */
+export type Mutation_RootUpdate_Special_OffersArgs = {
+  _inc?: InputMaybe<Special_Offers_Inc_Input>
+  _set?: InputMaybe<Special_Offers_Set_Input>
+  where: Special_Offers_Bool_Exp
+}
+
+/** mutation root */
+export type Mutation_RootUpdate_Special_Offers_By_PkArgs = {
+  _inc?: InputMaybe<Special_Offers_Inc_Input>
+  _set?: InputMaybe<Special_Offers_Set_Input>
+  pk_columns: Special_Offers_Pk_Columns_Input
+}
+
+/** mutation root */
+export type Mutation_RootUpdate_Special_Offers_ManyArgs = {
+  updates: Array<Special_Offers_Updates>
 }
 
 /** mutation root */
@@ -2740,6 +2852,12 @@ export type Query_Root = {
   reviews_aggregate: Reviews_Aggregate
   /** fetch data from the table: "reviews" using primary key columns */
   reviews_by_pk?: Maybe<Reviews>
+  /** fetch data from the table: "special_offers" */
+  special_offers: Array<Special_Offers>
+  /** fetch aggregated fields from the table: "special_offers" */
+  special_offers_aggregate: Special_Offers_Aggregate
+  /** fetch data from the table: "special_offers" using primary key columns */
+  special_offers_by_pk?: Maybe<Special_Offers>
   /** fetch data from the table: "users" */
   users: Array<Users>
   /** fetch aggregated fields from the table: "users" */
@@ -2925,6 +3043,26 @@ export type Query_RootReviews_AggregateArgs = {
 }
 
 export type Query_RootReviews_By_PkArgs = {
+  id: Scalars["uuid"]["input"]
+}
+
+export type Query_RootSpecial_OffersArgs = {
+  distinct_on?: InputMaybe<Array<Special_Offers_Select_Column>>
+  limit?: InputMaybe<Scalars["Int"]["input"]>
+  offset?: InputMaybe<Scalars["Int"]["input"]>
+  order_by?: InputMaybe<Array<Special_Offers_Order_By>>
+  where?: InputMaybe<Special_Offers_Bool_Exp>
+}
+
+export type Query_RootSpecial_Offers_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Special_Offers_Select_Column>>
+  limit?: InputMaybe<Scalars["Int"]["input"]>
+  offset?: InputMaybe<Scalars["Int"]["input"]>
+  order_by?: InputMaybe<Array<Special_Offers_Order_By>>
+  where?: InputMaybe<Special_Offers_Bool_Exp>
+}
+
+export type Query_RootSpecial_Offers_By_PkArgs = {
   id: Scalars["uuid"]["input"]
 }
 
@@ -3192,6 +3330,298 @@ export type Reviews_Variance_Fields = {
   rating?: Maybe<Scalars["Float"]["output"]>
 }
 
+/** columns and relationships of "special_offers" */
+export type Special_Offers = {
+  __typename?: "special_offers"
+  banner_image?: Maybe<Scalars["String"]["output"]>
+  created_at?: Maybe<Scalars["timestamptz"]["output"]>
+  description?: Maybe<Scalars["String"]["output"]>
+  discount_price: Scalars["numeric"]["output"]
+  id: Scalars["uuid"]["output"]
+  /** An object relationship */
+  menu_item?: Maybe<Menu_Items>
+  menu_item_id?: Maybe<Scalars["uuid"]["output"]>
+  terms?: Maybe<Array<Scalars["String"]["output"]>>
+  title: Scalars["String"]["output"]
+  valid_until?: Maybe<Scalars["timestamptz"]["output"]>
+}
+
+/** aggregated selection of "special_offers" */
+export type Special_Offers_Aggregate = {
+  __typename?: "special_offers_aggregate"
+  aggregate?: Maybe<Special_Offers_Aggregate_Fields>
+  nodes: Array<Special_Offers>
+}
+
+/** aggregate fields of "special_offers" */
+export type Special_Offers_Aggregate_Fields = {
+  __typename?: "special_offers_aggregate_fields"
+  avg?: Maybe<Special_Offers_Avg_Fields>
+  count: Scalars["Int"]["output"]
+  max?: Maybe<Special_Offers_Max_Fields>
+  min?: Maybe<Special_Offers_Min_Fields>
+  stddev?: Maybe<Special_Offers_Stddev_Fields>
+  stddev_pop?: Maybe<Special_Offers_Stddev_Pop_Fields>
+  stddev_samp?: Maybe<Special_Offers_Stddev_Samp_Fields>
+  sum?: Maybe<Special_Offers_Sum_Fields>
+  var_pop?: Maybe<Special_Offers_Var_Pop_Fields>
+  var_samp?: Maybe<Special_Offers_Var_Samp_Fields>
+  variance?: Maybe<Special_Offers_Variance_Fields>
+}
+
+/** aggregate fields of "special_offers" */
+export type Special_Offers_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Special_Offers_Select_Column>>
+  distinct?: InputMaybe<Scalars["Boolean"]["input"]>
+}
+
+/** aggregate avg on columns */
+export type Special_Offers_Avg_Fields = {
+  __typename?: "special_offers_avg_fields"
+  discount_price?: Maybe<Scalars["Float"]["output"]>
+}
+
+/** Boolean expression to filter rows from the table "special_offers". All fields are combined with a logical 'AND'. */
+export type Special_Offers_Bool_Exp = {
+  _and?: InputMaybe<Array<Special_Offers_Bool_Exp>>
+  _not?: InputMaybe<Special_Offers_Bool_Exp>
+  _or?: InputMaybe<Array<Special_Offers_Bool_Exp>>
+  banner_image?: InputMaybe<String_Comparison_Exp>
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>
+  description?: InputMaybe<String_Comparison_Exp>
+  discount_price?: InputMaybe<Numeric_Comparison_Exp>
+  id?: InputMaybe<Uuid_Comparison_Exp>
+  menu_item?: InputMaybe<Menu_Items_Bool_Exp>
+  menu_item_id?: InputMaybe<Uuid_Comparison_Exp>
+  terms?: InputMaybe<String_Array_Comparison_Exp>
+  title?: InputMaybe<String_Comparison_Exp>
+  valid_until?: InputMaybe<Timestamptz_Comparison_Exp>
+}
+
+/** unique or primary key constraints on table "special_offers" */
+export enum Special_Offers_Constraint {
+  /** unique or primary key constraint on columns "id" */
+  SpecialOffersPkey = "special_offers_pkey",
+}
+
+/** input type for incrementing numeric columns in table "special_offers" */
+export type Special_Offers_Inc_Input = {
+  discount_price?: InputMaybe<Scalars["numeric"]["input"]>
+}
+
+/** input type for inserting data into table "special_offers" */
+export type Special_Offers_Insert_Input = {
+  banner_image?: InputMaybe<Scalars["String"]["input"]>
+  created_at?: InputMaybe<Scalars["timestamptz"]["input"]>
+  description?: InputMaybe<Scalars["String"]["input"]>
+  discount_price?: InputMaybe<Scalars["numeric"]["input"]>
+  id?: InputMaybe<Scalars["uuid"]["input"]>
+  menu_item?: InputMaybe<Menu_Items_Obj_Rel_Insert_Input>
+  menu_item_id?: InputMaybe<Scalars["uuid"]["input"]>
+  terms?: InputMaybe<Array<Scalars["String"]["input"]>>
+  title?: InputMaybe<Scalars["String"]["input"]>
+  valid_until?: InputMaybe<Scalars["timestamptz"]["input"]>
+}
+
+/** aggregate max on columns */
+export type Special_Offers_Max_Fields = {
+  __typename?: "special_offers_max_fields"
+  banner_image?: Maybe<Scalars["String"]["output"]>
+  created_at?: Maybe<Scalars["timestamptz"]["output"]>
+  description?: Maybe<Scalars["String"]["output"]>
+  discount_price?: Maybe<Scalars["numeric"]["output"]>
+  id?: Maybe<Scalars["uuid"]["output"]>
+  menu_item_id?: Maybe<Scalars["uuid"]["output"]>
+  terms?: Maybe<Array<Scalars["String"]["output"]>>
+  title?: Maybe<Scalars["String"]["output"]>
+  valid_until?: Maybe<Scalars["timestamptz"]["output"]>
+}
+
+/** aggregate min on columns */
+export type Special_Offers_Min_Fields = {
+  __typename?: "special_offers_min_fields"
+  banner_image?: Maybe<Scalars["String"]["output"]>
+  created_at?: Maybe<Scalars["timestamptz"]["output"]>
+  description?: Maybe<Scalars["String"]["output"]>
+  discount_price?: Maybe<Scalars["numeric"]["output"]>
+  id?: Maybe<Scalars["uuid"]["output"]>
+  menu_item_id?: Maybe<Scalars["uuid"]["output"]>
+  terms?: Maybe<Array<Scalars["String"]["output"]>>
+  title?: Maybe<Scalars["String"]["output"]>
+  valid_until?: Maybe<Scalars["timestamptz"]["output"]>
+}
+
+/** response of any mutation on the table "special_offers" */
+export type Special_Offers_Mutation_Response = {
+  __typename?: "special_offers_mutation_response"
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars["Int"]["output"]
+  /** data from the rows affected by the mutation */
+  returning: Array<Special_Offers>
+}
+
+/** input type for inserting object relation for remote table "special_offers" */
+export type Special_Offers_Obj_Rel_Insert_Input = {
+  data: Special_Offers_Insert_Input
+  /** upsert condition */
+  on_conflict?: InputMaybe<Special_Offers_On_Conflict>
+}
+
+/** on_conflict condition type for table "special_offers" */
+export type Special_Offers_On_Conflict = {
+  constraint: Special_Offers_Constraint
+  update_columns?: Array<Special_Offers_Update_Column>
+  where?: InputMaybe<Special_Offers_Bool_Exp>
+}
+
+/** Ordering options when selecting data from "special_offers". */
+export type Special_Offers_Order_By = {
+  banner_image?: InputMaybe<Order_By>
+  created_at?: InputMaybe<Order_By>
+  description?: InputMaybe<Order_By>
+  discount_price?: InputMaybe<Order_By>
+  id?: InputMaybe<Order_By>
+  menu_item?: InputMaybe<Menu_Items_Order_By>
+  menu_item_id?: InputMaybe<Order_By>
+  terms?: InputMaybe<Order_By>
+  title?: InputMaybe<Order_By>
+  valid_until?: InputMaybe<Order_By>
+}
+
+/** primary key columns input for table: special_offers */
+export type Special_Offers_Pk_Columns_Input = {
+  id: Scalars["uuid"]["input"]
+}
+
+/** select columns of table "special_offers" */
+export enum Special_Offers_Select_Column {
+  /** column name */
+  BannerImage = "banner_image",
+  /** column name */
+  CreatedAt = "created_at",
+  /** column name */
+  Description = "description",
+  /** column name */
+  DiscountPrice = "discount_price",
+  /** column name */
+  Id = "id",
+  /** column name */
+  MenuItemId = "menu_item_id",
+  /** column name */
+  Terms = "terms",
+  /** column name */
+  Title = "title",
+  /** column name */
+  ValidUntil = "valid_until",
+}
+
+/** input type for updating data in table "special_offers" */
+export type Special_Offers_Set_Input = {
+  banner_image?: InputMaybe<Scalars["String"]["input"]>
+  created_at?: InputMaybe<Scalars["timestamptz"]["input"]>
+  description?: InputMaybe<Scalars["String"]["input"]>
+  discount_price?: InputMaybe<Scalars["numeric"]["input"]>
+  id?: InputMaybe<Scalars["uuid"]["input"]>
+  menu_item_id?: InputMaybe<Scalars["uuid"]["input"]>
+  terms?: InputMaybe<Array<Scalars["String"]["input"]>>
+  title?: InputMaybe<Scalars["String"]["input"]>
+  valid_until?: InputMaybe<Scalars["timestamptz"]["input"]>
+}
+
+/** aggregate stddev on columns */
+export type Special_Offers_Stddev_Fields = {
+  __typename?: "special_offers_stddev_fields"
+  discount_price?: Maybe<Scalars["Float"]["output"]>
+}
+
+/** aggregate stddev_pop on columns */
+export type Special_Offers_Stddev_Pop_Fields = {
+  __typename?: "special_offers_stddev_pop_fields"
+  discount_price?: Maybe<Scalars["Float"]["output"]>
+}
+
+/** aggregate stddev_samp on columns */
+export type Special_Offers_Stddev_Samp_Fields = {
+  __typename?: "special_offers_stddev_samp_fields"
+  discount_price?: Maybe<Scalars["Float"]["output"]>
+}
+
+/** Streaming cursor of the table "special_offers" */
+export type Special_Offers_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Special_Offers_Stream_Cursor_Value_Input
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>
+}
+
+/** Initial value of the column from where the streaming should start */
+export type Special_Offers_Stream_Cursor_Value_Input = {
+  banner_image?: InputMaybe<Scalars["String"]["input"]>
+  created_at?: InputMaybe<Scalars["timestamptz"]["input"]>
+  description?: InputMaybe<Scalars["String"]["input"]>
+  discount_price?: InputMaybe<Scalars["numeric"]["input"]>
+  id?: InputMaybe<Scalars["uuid"]["input"]>
+  menu_item_id?: InputMaybe<Scalars["uuid"]["input"]>
+  terms?: InputMaybe<Array<Scalars["String"]["input"]>>
+  title?: InputMaybe<Scalars["String"]["input"]>
+  valid_until?: InputMaybe<Scalars["timestamptz"]["input"]>
+}
+
+/** aggregate sum on columns */
+export type Special_Offers_Sum_Fields = {
+  __typename?: "special_offers_sum_fields"
+  discount_price?: Maybe<Scalars["numeric"]["output"]>
+}
+
+/** update columns of table "special_offers" */
+export enum Special_Offers_Update_Column {
+  /** column name */
+  BannerImage = "banner_image",
+  /** column name */
+  CreatedAt = "created_at",
+  /** column name */
+  Description = "description",
+  /** column name */
+  DiscountPrice = "discount_price",
+  /** column name */
+  Id = "id",
+  /** column name */
+  MenuItemId = "menu_item_id",
+  /** column name */
+  Terms = "terms",
+  /** column name */
+  Title = "title",
+  /** column name */
+  ValidUntil = "valid_until",
+}
+
+export type Special_Offers_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Special_Offers_Inc_Input>
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Special_Offers_Set_Input>
+  /** filter the rows which have to be updated */
+  where: Special_Offers_Bool_Exp
+}
+
+/** aggregate var_pop on columns */
+export type Special_Offers_Var_Pop_Fields = {
+  __typename?: "special_offers_var_pop_fields"
+  discount_price?: Maybe<Scalars["Float"]["output"]>
+}
+
+/** aggregate var_samp on columns */
+export type Special_Offers_Var_Samp_Fields = {
+  __typename?: "special_offers_var_samp_fields"
+  discount_price?: Maybe<Scalars["Float"]["output"]>
+}
+
+/** aggregate variance on columns */
+export type Special_Offers_Variance_Fields = {
+  __typename?: "special_offers_variance_fields"
+  discount_price?: Maybe<Scalars["Float"]["output"]>
+}
+
 export type Subscription_Root = {
   __typename?: "subscription_root"
   /** fetch data from the table: "cart" */
@@ -3266,6 +3696,14 @@ export type Subscription_Root = {
   reviews_by_pk?: Maybe<Reviews>
   /** fetch data from the table in a streaming manner: "reviews" */
   reviews_stream: Array<Reviews>
+  /** fetch data from the table: "special_offers" */
+  special_offers: Array<Special_Offers>
+  /** fetch aggregated fields from the table: "special_offers" */
+  special_offers_aggregate: Special_Offers_Aggregate
+  /** fetch data from the table: "special_offers" using primary key columns */
+  special_offers_by_pk?: Maybe<Special_Offers>
+  /** fetch data from the table in a streaming manner: "special_offers" */
+  special_offers_stream: Array<Special_Offers>
   /** fetch data from the table: "users" */
   users: Array<Users>
   /** fetch aggregated fields from the table: "users" */
@@ -3508,6 +3946,32 @@ export type Subscription_RootReviews_StreamArgs = {
   batch_size: Scalars["Int"]["input"]
   cursor: Array<InputMaybe<Reviews_Stream_Cursor_Input>>
   where?: InputMaybe<Reviews_Bool_Exp>
+}
+
+export type Subscription_RootSpecial_OffersArgs = {
+  distinct_on?: InputMaybe<Array<Special_Offers_Select_Column>>
+  limit?: InputMaybe<Scalars["Int"]["input"]>
+  offset?: InputMaybe<Scalars["Int"]["input"]>
+  order_by?: InputMaybe<Array<Special_Offers_Order_By>>
+  where?: InputMaybe<Special_Offers_Bool_Exp>
+}
+
+export type Subscription_RootSpecial_Offers_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Special_Offers_Select_Column>>
+  limit?: InputMaybe<Scalars["Int"]["input"]>
+  offset?: InputMaybe<Scalars["Int"]["input"]>
+  order_by?: InputMaybe<Array<Special_Offers_Order_By>>
+  where?: InputMaybe<Special_Offers_Bool_Exp>
+}
+
+export type Subscription_RootSpecial_Offers_By_PkArgs = {
+  id: Scalars["uuid"]["input"]
+}
+
+export type Subscription_RootSpecial_Offers_StreamArgs = {
+  batch_size: Scalars["Int"]["input"]
+  cursor: Array<InputMaybe<Special_Offers_Stream_Cursor_Input>>
+  where?: InputMaybe<Special_Offers_Bool_Exp>
 }
 
 export type Subscription_RootUsersArgs = {
@@ -3819,6 +4283,8 @@ export type AddToCartMutationVariables = Exact<{
   user_id: Scalars["uuid"]["input"]
   menu_item_id: Scalars["uuid"]["input"]
   quantity: Scalars["Int"]["input"]
+  special_offer_id?: InputMaybe<Scalars["uuid"]["input"]>
+  price_at_purchase: Scalars["numeric"]["input"]
 }>
 
 export type AddToCartMutation = {
@@ -3902,6 +4368,7 @@ export type GetUserCartQuery = {
     id: any
     quantity: number
     added_at?: any | null
+    price_at_purchase: any
     user: { __typename?: "users"; id: any; name: string; email: string }
     menu_item: {
       __typename?: "menu_items"
@@ -3912,7 +4379,40 @@ export type GetUserCartQuery = {
       image_url: string
       is_available: boolean
     }
+    special_offer?: {
+      __typename?: "special_offers"
+      id: any
+      discount_price: any
+      title: string
+    } | null
   }>
+}
+
+export type GetOfferByIdQueryVariables = Exact<{
+  id: Scalars["uuid"]["input"]
+}>
+
+export type GetOfferByIdQuery = {
+  __typename?: "query_root"
+  special_offers_by_pk?: {
+    __typename?: "special_offers"
+    id: any
+    title: string
+    description?: string | null
+    discount_price: any
+    valid_until?: any | null
+    banner_image?: string | null
+    terms?: Array<string> | null
+    menu_item?: {
+      __typename?: "menu_items"
+      id: any
+      name: string
+      price: any
+      description: string
+      image_url: string
+      is_available: boolean
+    } | null
+  } | null
 }
 
 export type GetMenuQueryVariables = Exact<{ [key: string]: never }>
@@ -3991,6 +4491,28 @@ export type GetOrdersQuery = {
   }>
 }
 
+export type GetSpecialOffersQueryVariables = Exact<{ [key: string]: never }>
+
+export type GetSpecialOffersQuery = {
+  __typename?: "query_root"
+  special_offers: Array<{
+    __typename?: "special_offers"
+    id: any
+    title: string
+    discount_price: any
+    banner_image?: string | null
+    menu_item?: {
+      __typename?: "menu_items"
+      id: any
+      name: string
+      price: any
+      description: string
+      image_url: string
+      is_available: boolean
+    } | null
+  }>
+}
+
 export type GetLiveOrdersSubscriptionVariables = Exact<{ [key: string]: never }>
 
 export type GetLiveOrdersSubscription = {
@@ -4010,12 +4532,20 @@ export type GetLiveOrdersSubscription = {
 }
 
 export const AddToCartDocument = gql`
-  mutation AddToCart($user_id: uuid!, $menu_item_id: uuid!, $quantity: Int!) {
+  mutation AddToCart(
+    $user_id: uuid!
+    $menu_item_id: uuid!
+    $quantity: Int!
+    $special_offer_id: uuid
+    $price_at_purchase: numeric!
+  ) {
     insert_cart_one(
       object: {
         user_id: $user_id
         menu_item_id: $menu_item_id
         quantity: $quantity
+        special_offer_id: $special_offer_id
+        price_at_purchase: $price_at_purchase
       }
     ) {
       menu_item {
@@ -4045,6 +4575,8 @@ export type AddToCartMutationFn = Apollo.MutationFunction<
  *      user_id: // value for 'user_id'
  *      menu_item_id: // value for 'menu_item_id'
  *      quantity: // value for 'quantity'
+ *      special_offer_id: // value for 'special_offer_id'
+ *      price_at_purchase: // value for 'price_at_purchase'
  *   },
  * });
  */
@@ -4319,6 +4851,7 @@ export const GetUserCartDocument = gql`
       id
       quantity
       added_at
+      price_at_purchase
       user {
         id
         name
@@ -4331,6 +4864,11 @@ export const GetUserCartDocument = gql`
         price
         image_url
         is_available
+      }
+      special_offer {
+        id
+        discount_price
+        title
       }
     }
   }
@@ -4407,6 +4945,102 @@ export type GetUserCartSuspenseQueryHookResult = ReturnType<
 export type GetUserCartQueryResult = Apollo.QueryResult<
   GetUserCartQuery,
   GetUserCartQueryVariables
+>
+export const GetOfferByIdDocument = gql`
+  query GetOfferById($id: uuid!) {
+    special_offers_by_pk(id: $id) {
+      id
+      title
+      description
+      discount_price
+      valid_until
+      banner_image
+      terms
+      menu_item {
+        id
+        name
+        price
+        description
+        image_url
+        is_available
+      }
+    }
+  }
+`
+
+/**
+ * __useGetOfferByIdQuery__
+ *
+ * To run a query within a React component, call `useGetOfferByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOfferByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOfferByIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetOfferByIdQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetOfferByIdQuery,
+    GetOfferByIdQueryVariables
+  > &
+    (
+      | { variables: GetOfferByIdQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetOfferByIdQuery, GetOfferByIdQueryVariables>(
+    GetOfferByIdDocument,
+    options
+  )
+}
+export function useGetOfferByIdLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetOfferByIdQuery,
+    GetOfferByIdQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetOfferByIdQuery, GetOfferByIdQueryVariables>(
+    GetOfferByIdDocument,
+    options
+  )
+}
+export function useGetOfferByIdSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetOfferByIdQuery,
+        GetOfferByIdQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions }
+  return Apollo.useSuspenseQuery<GetOfferByIdQuery, GetOfferByIdQueryVariables>(
+    GetOfferByIdDocument,
+    options
+  )
+}
+export type GetOfferByIdQueryHookResult = ReturnType<
+  typeof useGetOfferByIdQuery
+>
+export type GetOfferByIdLazyQueryHookResult = ReturnType<
+  typeof useGetOfferByIdLazyQuery
+>
+export type GetOfferByIdSuspenseQueryHookResult = ReturnType<
+  typeof useGetOfferByIdSuspenseQuery
+>
+export type GetOfferByIdQueryResult = Apollo.QueryResult<
+  GetOfferByIdQuery,
+  GetOfferByIdQueryVariables
 >
 export const GetMenuDocument = gql`
   query GetMenu {
@@ -4733,6 +5367,94 @@ export type GetOrdersSuspenseQueryHookResult = ReturnType<
 export type GetOrdersQueryResult = Apollo.QueryResult<
   GetOrdersQuery,
   GetOrdersQueryVariables
+>
+export const GetSpecialOffersDocument = gql`
+  query GetSpecialOffers {
+    special_offers {
+      id
+      title
+      discount_price
+      banner_image
+      menu_item {
+        id
+        name
+        price
+        description
+        image_url
+        is_available
+      }
+    }
+  }
+`
+
+/**
+ * __useGetSpecialOffersQuery__
+ *
+ * To run a query within a React component, call `useGetSpecialOffersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSpecialOffersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSpecialOffersQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetSpecialOffersQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetSpecialOffersQuery,
+    GetSpecialOffersQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetSpecialOffersQuery, GetSpecialOffersQueryVariables>(
+    GetSpecialOffersDocument,
+    options
+  )
+}
+export function useGetSpecialOffersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetSpecialOffersQuery,
+    GetSpecialOffersQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    GetSpecialOffersQuery,
+    GetSpecialOffersQueryVariables
+  >(GetSpecialOffersDocument, options)
+}
+export function useGetSpecialOffersSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetSpecialOffersQuery,
+        GetSpecialOffersQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions }
+  return Apollo.useSuspenseQuery<
+    GetSpecialOffersQuery,
+    GetSpecialOffersQueryVariables
+  >(GetSpecialOffersDocument, options)
+}
+export type GetSpecialOffersQueryHookResult = ReturnType<
+  typeof useGetSpecialOffersQuery
+>
+export type GetSpecialOffersLazyQueryHookResult = ReturnType<
+  typeof useGetSpecialOffersLazyQuery
+>
+export type GetSpecialOffersSuspenseQueryHookResult = ReturnType<
+  typeof useGetSpecialOffersSuspenseQuery
+>
+export type GetSpecialOffersQueryResult = Apollo.QueryResult<
+  GetSpecialOffersQuery,
+  GetSpecialOffersQueryVariables
 >
 export const GetLiveOrdersDocument = gql`
   subscription GetLiveOrders {

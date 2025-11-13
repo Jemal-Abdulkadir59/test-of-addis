@@ -1,0 +1,19 @@
+query GetOfferById($id: uuid!) {
+  special_offers_by_pk(id: $id) {
+    id
+    title
+    description
+    discount_price
+    valid_until
+    banner_image
+    terms
+    menu_item {
+      id
+      name
+      price
+      description
+      image_url
+      is_available
+    }
+  }
+}

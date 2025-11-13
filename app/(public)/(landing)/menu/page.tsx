@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation"
 import {
   useAddToCartMutation,
   useGetMenuQuery,
+  useGetSpecialOffersQuery,
   useGetUserCartQuery,
 } from "@/generated/graphql"
 import { getSession } from "next-auth/react"
@@ -25,60 +26,18 @@ import { SpecialOffersSkeleton } from "@/components/skeleton/specialOffersSkelet
 const Index = () => {
   const { toast } = useToast()
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
-  const [selectedOffer, setSelectedOffer] = useState<any>(null)
+  const [selectedOffer, setSelectedOffer] = useState<string>("")
   const router = useRouter()
   const pathname = usePathname()
 
-  const offers = [
-    {
-      id: 1,
-      image: "/assets/offer-1.jpg",
-      title: "First Order Discount",
-      discount: "-20%",
-      description:
-        "Get 20% off on your first order! Enjoy our delicious menu at a special price.",
-      originalPrice: "25.00",
-      discountedPrice: "20.00",
-      validUntil: "December 31, 2025",
-      terms: [
-        "Valid for first order only",
-        "Cannot be combined with other offers",
-        "Minimum order value GBP 15.00",
-      ],
-    },
-    {
-      id: 2,
-      image: "/assets/offer-2.jpg",
-      title: "Vegan Discount",
-      discount: "-20%",
-      description:
-        "Special discount on all our vegan menu items. Tasty and healthy!",
-      originalPrice: "18.00",
-      discountedPrice: "14.40",
-      validUntil: "January 15, 2026",
-      terms: [
-        "Valid on vegan items only",
-        "Available all day",
-        "No minimum order",
-      ],
-    },
-    {
-      id: 3,
-      image: "/assets/offer-3.jpg",
-      title: "Free Ice Cream Offer",
-      discount: "-100%",
-      description:
-        "Get a free ice cream with any combo meal purchase. Sweet deal!",
-      originalPrice: "3.50",
-      discountedPrice: "0.00",
-      validUntil: "November 30, 2025",
-      terms: [
-        "Must purchase a combo meal",
-        "One per order",
-        "Subject to availability",
-      ],
-    },
-  ]
+  // Query special offers Data
+  const {
+    data: offersData,
+    loading: loadingOffers,
+    error: errorOffer,
+  } = useGetSpecialOffersQuery()
+
+  const specialOffers = offersData?.special_offers ?? []
 
   //# Query to fetch menu items
   const { data: products, loading, error } = useGetMenuQuery()
@@ -108,12 +67,27 @@ const Index = () => {
       return router.push(`/auth/sign-in?redirectTo=${pathname}`)
     }
 
+    // find the selected menu item and any related special offer
+    const menuItem = products?.menu_items.find((item) => item.id === menuItemId)
+    const specialOffer = specialOffers?.find(
+      (offer) => offer.menu_item?.id === menuItemId
+    )
+
+    if (!menuItem) return
+
+    // calculate correct price at purchase
+    const price_at_purchase = specialOffer
+      ? specialOffer.discount_price
+      : menuItem.price
+
     try {
       const result = await addToCart({
         variables: {
           user_id: session.user.id,
           menu_item_id: menuItemId,
           quantity: quantity,
+          special_offer_id: specialOffer?.id ?? null,
+          price_at_purchase,
         },
       })
 
@@ -147,8 +121,8 @@ const Index = () => {
     }
   }
 
-  const handleOfferClick = (offer: any) => {
-    setSelectedOffer(offer)
+  const handleOfferClick = (id: string) => {
+    setSelectedOffer(id)
 
     // Wait for the component to render before scrolling
     setTimeout(() => {
@@ -173,23 +147,26 @@ const Index = () => {
         {selectedOffer && (
           <div className="mb-8" id="offer-detail">
             <OfferDetail
-              {...selectedOffer}
-              onClose={() => setSelectedOffer(null)}
+              selectedOffer={selectedOffer}
+              onClose={() => setSelectedOffer("")}
               onAddToCart={handleAddToCart}
             />
           </div>
         )}
-        {loading ? (
+        {loadingOffers ? (
           <SpecialOffersSkeleton />
         ) : (
           <section id="offers" className="mb-12">
             <h2 className="text-3xl font-bold mb-6">Special Offers</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {offers.map((offer) => (
+              {specialOffers.map((offer) => (
                 <OfferCard
                   key={offer.id}
                   {...offer}
-                  onClick={() => handleOfferClick(offer)}
+                  menu_item={offer.menu_item ?? undefined}
+                  onAddToCart={handleAddToCart}
+                  loadingAddToCart={loadingAddToCart}
+                  onClick={(id) => handleOfferClick(id)}
                 />
               ))}
             </div>
@@ -207,6 +184,7 @@ const Index = () => {
                 <ProductCard
                   key={product.id}
                   {...product}
+                  specialOffers={specialOffers}
                   onAddToCart={handleAddToCart}
                   loadingAddToCart={loadingAddToCart}
                 />
@@ -220,112 +198,3 @@ const Index = () => {
 }
 
 export default Index
-
-//  {selectedProduct && (
-//         <ProductDetail
-//           open={!!selectedProduct}
-//           onOpenChange={(open) => !open && setSelectedProduct(null)}
-//           {...selectedProduct}
-//           onAddToCart={handleAddToCart}
-//         />
-//       )}
-// const handleUpdateQuantity = (id: string, quantity: number) => {
-//   setCartItems(
-//     cartItems.map((item) => (item.id === id ? { ...item, quantity } : item))
-//   )
-// }
-
-// const handleRemoveItem = (id: string) => {
-//   setCartItems(cartItems.filter((item) => item.id !== id))
-//   toast({
-//     title: "Removed from cart",
-//     description: "Item has been removed from your cart.",
-//   })
-// }
-
-// const handleCheckout = () => {
-//   if (cartItems.length === 0) {
-//     toast({
-//       title: "Cart is empty",
-//       description: "Please add items to your cart before checking out.",
-//       variant: "destructive",
-//     })
-//     return
-//   }
-//   navigate("/checkout", { state: { cartItems } })
-// }
-
-// const products = [
-//   {
-//     id: 1,
-//     image: "/img/gallery/meal-small.jpg",
-//     title: "The classics for 3",
-//     description:
-//       "McDonald's big tasty - Royal Cheeseburger 3 medium fries | Fries, Pepsi, 3 cold drinks",
-//     price: "21.10",
-//     ingredients:
-//       "Premium beef patty, sesame seed bun, cheddar cheese, lettuce, tomato, onions, pickles, special sauce",
-//     calories: "850",
-//     allergens: ["Gluten", "Dairy", "Eggs", "Soy"],
-//   },
-//   {
-//     id: 2,
-//     image: "/img/meals/cookie.jpg",
-//     title: "The classics for 3",
-//     description:
-//       "McDonald's big tasty - Royal Cheeseburger 3 medium fries | Fries, Pepsi, 3 cold drinks",
-//     price: "21.10",
-//     ingredients:
-//       "Premium beef patty, sesame seed bun, cheddar cheese, lettuce, tomato, onions, pickles, special sauce",
-//     calories: "850",
-//     allergens: ["Gluten", "Dairy", "Eggs", "Soy"],
-//   },
-//   {
-//     id: 3,
-//     image: "/img/meals/meal-3.jpg",
-//     title: "Royal Cheese Burger with extra Fries",
-//     description:
-//       "Royal Cheeseburger 3 medium fries | Fries, Pepsi, 3 cold drinks",
-//     price: "21.10",
-//     ingredients:
-//       "Quarter pound beef patty, sesame seed bun, double cheddar cheese, lettuce, onions, pickles, ketchup, mustard",
-//     calories: "720",
-//     allergens: ["Gluten", "Dairy", "Soy"],
-//   },
-//   {
-//     id: 4,
-//     image: "/img/meals/meal-4.jpg",
-//     title: "The classics for 3",
-//     description:
-//       "McDonald's big tasty - Royal Cheeseburger 3 medium fries | Fries, Pepsi, 3 cold drinks",
-//     price: "34.10",
-//     ingredients:
-//       "Premium beef patty, sesame seed bun, cheddar cheese, lettuce, tomato, onions, pickles, special sauce",
-//     calories: "850",
-//     allergens: ["Gluten", "Dairy", "Eggs", "Soy"],
-//   },
-//   {
-//     id: 5,
-//     image: "/img/meals/meal-5.jpg",
-//     title: "The classics for 3",
-//     description:
-//       "McDonald's big tasty - Royal Cheeseburger 3 medium fries | Fries, Pepsi, 3 cold drinks",
-//     price: "21.10",
-//     ingredients:
-//       "Premium beef patty, sesame seed bun, cheddar cheese, lettuce, tomato, onions, pickles, special sauce",
-//     calories: "850",
-//     allergens: ["Gluten", "Dairy", "Eggs", "Soy"],
-//   },
-//   {
-//     id: 6,
-//     image: "/img/meals/meal-6.jpg",
-//     title: "The classics for 3",
-//     description:
-//       "McDonald's big tasty - Royal Cheeseburger 3 medium fries | Fries, Pepsi, 3 cold drinks",
-//     price: "21.10",
-//     ingredients:
-//       "Premium beef patty, sesame seed bun, cheddar cheese, lettuce, tomato, onions, pickles, special sauce",
-//     calories: "850",
-//     allergens: ["Gluten", "Dairy", "Eggs", "Soy"],
-//   },
-// ]

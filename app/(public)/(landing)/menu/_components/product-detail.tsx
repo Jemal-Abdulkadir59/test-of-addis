@@ -20,6 +20,20 @@ interface ProductDetailProps {
   onAddToCart?: (item: any, quantity: number) => void
   selectedProduct: string
   loadingAddToCart?: boolean
+  specialOffers?: {
+    id: string
+    title: string
+    discount_price: number
+    banner_image?: string | null | undefined
+    menu_item?: {
+      id: string
+      name: string
+      price: number
+      description: string
+      image_url: string
+      is_available: boolean
+    }
+  }[]
 }
 
 const ProductDetail = ({
@@ -28,6 +42,7 @@ const ProductDetail = ({
   onAddToCart,
   selectedProduct,
   loadingAddToCart,
+  specialOffers,
 }: ProductDetailProps) => {
   const [quantity, setQuantity] = useState(1)
 
@@ -59,6 +74,11 @@ const ProductDetail = ({
       onOpenChange(false)
     }
   }
+
+  const specialOffer = specialOffers?.find(
+    (offer) => offer.menu_item?.id === id
+  )
+  const itemPrice = specialOffer ? specialOffer.discount_price : price
 
   if (isLoadingDetail)
     return <ProductDetailSkeleton open={open} onOpenChange={onOpenChange} />
@@ -130,7 +150,7 @@ const ProductDetail = ({
               disabled={loadingAddToCart}
               onClick={(e) => handleAddToCart(e, id)}
             >
-              Add to Cart - ETB {(parseFloat(price) * quantity).toFixed(2)}
+              Add to Cart - ETB {(parseFloat(itemPrice) * quantity).toFixed(2)}
             </Button>
           </div>
         </div>

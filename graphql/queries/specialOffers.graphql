@@ -1,0 +1,16 @@
+query GetSpecialOffers {
+  special_offers {
+    id
+    title
+    discount_price
+    banner_image
+    menu_item {
+      id
+      name
+      price
+      description
+      image_url
+      is_available
+    }
+  }
+}
