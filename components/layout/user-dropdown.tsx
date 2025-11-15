@@ -1,7 +1,7 @@
 import Link from "next/link"
+// import { userData } from "@/data/user"
+import { signOut } from "next-auth/react"
 import { LogOut, User, UserCog } from "lucide-react"
-
-import { userData } from "@/data/user"
 
 import { getInitials } from "@/lib/utils"
 
@@ -17,7 +17,22 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-export function UserDropdown() {
+interface UserDropdownUser {
+  id?: string
+  name?: string
+  email?: string
+  role: string
+  avatar_url?: string | null
+  username?: string | null
+}
+
+interface UserDropdownProps {
+  user?: UserDropdownUser
+}
+
+export function UserDropdown(user: UserDropdownProps) {
+  // console.log("User in UserDropdown:", user?.user)
+  const userData = user?.user
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -28,9 +43,12 @@ export function UserDropdown() {
           aria-label="User"
         >
           <Avatar className="size-9">
-            <AvatarImage src={userData?.avatar} alt="" />
+            <AvatarImage
+              src={`/img/customers/${userData?.avatar_url}`}
+              alt=""
+            />
             <AvatarFallback className="bg-transparent">
-              {userData?.name && getInitials(userData.name)}
+              {userData?.username && getInitials(userData.username)}
             </AvatarFallback>
           </Avatar>
         </Button>
@@ -38,13 +56,16 @@ export function UserDropdown() {
       <DropdownMenuContent forceMount>
         <DropdownMenuLabel className="flex gap-2">
           <Avatar>
-            <AvatarImage src={userData?.avatar} alt="Avatar" />
+            <AvatarImage
+              src={`/img/customers/${userData?.avatar_url}`}
+              alt="Avatar"
+            />
             <AvatarFallback className="bg-transparent">
-              {userData?.name && getInitials(userData.name)}
+              {userData?.username && getInitials(userData.username)}
             </AvatarFallback>
           </Avatar>
           <div className="flex flex-col overflow-hidden">
-            <p className="text-sm font-medium truncate">John Doe</p>
+            <p className="text-sm font-medium truncate">{userData?.username}</p>
             <p className="text-xs text-muted-foreground font-semibold truncate">
               {userData?.email}
             </p>
@@ -66,7 +87,7 @@ export function UserDropdown() {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={() => signOut({ callbackUrl: "/" })}>
           <LogOut className="me-2 size-4" />
           Sign Out
         </DropdownMenuItem>

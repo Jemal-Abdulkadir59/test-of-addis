@@ -194,8 +194,8 @@ export type Cart_Bool_Exp = {
 export enum Cart_Constraint {
   /** unique or primary key constraint on columns "id" */
   CartPkey = "cart_pkey",
-  /** unique or primary key constraint on columns "user_id", "special_offer_id", "menu_item_id" */
-  CartUserIdMenuItemIdSpecialOfferIdKey = "cart_user_id_menu_item_id_special_offer_id_key",
+  /** unique or primary key constraint on columns "user_id", "menu_item_id" */
+  CartUserIdMenuItemIdKey = "cart_user_id_menu_item_id_key",
 }
 
 /** input type for incrementing numeric columns in table "cart" */
@@ -4415,6 +4415,23 @@ export type GetOfferByIdQuery = {
   } | null
 }
 
+export type GetUserByIdQueryVariables = Exact<{
+  id: Scalars["uuid"]["input"]
+}>
+
+export type GetUserByIdQuery = {
+  __typename?: "query_root"
+  users_by_pk?: {
+    __typename?: "users"
+    id: any
+    name: string
+    email: string
+    role: string
+    avatar_url?: string | null
+    username?: string | null
+  } | null
+}
+
 export type GetMenuQueryVariables = Exact<{ [key: string]: never }>
 
 export type GetMenuQuery = {
@@ -5041,6 +5058,91 @@ export type GetOfferByIdSuspenseQueryHookResult = ReturnType<
 export type GetOfferByIdQueryResult = Apollo.QueryResult<
   GetOfferByIdQuery,
   GetOfferByIdQueryVariables
+>
+export const GetUserByIdDocument = gql`
+  query GetUserById($id: uuid!) {
+    users_by_pk(id: $id) {
+      id
+      name
+      email
+      role
+      avatar_url
+      username
+    }
+  }
+`
+
+/**
+ * __useGetUserByIdQuery__
+ *
+ * To run a query within a React component, call `useGetUserByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserByIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetUserByIdQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetUserByIdQuery,
+    GetUserByIdQueryVariables
+  > &
+    (
+      | { variables: GetUserByIdQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetUserByIdQuery, GetUserByIdQueryVariables>(
+    GetUserByIdDocument,
+    options
+  )
+}
+export function useGetUserByIdLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetUserByIdQuery,
+    GetUserByIdQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetUserByIdQuery, GetUserByIdQueryVariables>(
+    GetUserByIdDocument,
+    options
+  )
+}
+export function useGetUserByIdSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetUserByIdQuery,
+        GetUserByIdQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions }
+  return Apollo.useSuspenseQuery<GetUserByIdQuery, GetUserByIdQueryVariables>(
+    GetUserByIdDocument,
+    options
+  )
+}
+export type GetUserByIdQueryHookResult = ReturnType<typeof useGetUserByIdQuery>
+export type GetUserByIdLazyQueryHookResult = ReturnType<
+  typeof useGetUserByIdLazyQuery
+>
+export type GetUserByIdSuspenseQueryHookResult = ReturnType<
+  typeof useGetUserByIdSuspenseQuery
+>
+export type GetUserByIdQueryResult = Apollo.QueryResult<
+  GetUserByIdQuery,
+  GetUserByIdQueryVariables
 >
 export const GetMenuDocument = gql`
   query GetMenu {

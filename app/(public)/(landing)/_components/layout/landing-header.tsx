@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { useParams, usePathname } from "next/navigation"
-import { useGetUserCartQuery } from "@/generated/graphql"
+import { useGetUserByIdQuery, useGetUserCartQuery } from "@/generated/graphql"
 import { getSession } from "next-auth/react"
 import { LogIn, ShoppingCart } from "lucide-react"
 
@@ -17,6 +17,7 @@ import { cn, isActivePathname } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { Button, buttonVariants } from "@/components/ui/button"
 import CartSheet from "../../menu/_components/cart-sheet"
+import { UserDropdown } from "@/components/layout/user-dropdown"
 // import { LanguageDropdown } from "@/components/language-dropdown"
 import { ModeDropdown } from "@/components/mode-dropdown"
 import { LandingSidebar } from "./landing-sidebar"
@@ -49,6 +50,17 @@ export function LandingHeader() {
 
   const cartItems = data?.cart || []
 
+  // Run query ONLY when userId is available
+  const {
+    data: userData,
+    loading: loadingUser,
+    error: err,
+  } = useGetUserByIdQuery({
+    variables: { id: userId! },
+    skip: !userId, // important — prevents error
+  })
+
+  const user = userData?.users_by_pk
   return (
     <header className="sticky top-0 z-50 w-full bg-background border-b border-sidebar-border">
       <div className="container grid grid-cols-3 items-center gap-2 py-2.5">
@@ -104,13 +116,17 @@ export function LandingHeader() {
           </Button>
           <ModeDropdown />
           {/* <LanguageDropdown dictionary={dictionary} /> */}
-          <Link
-            href="/register"
-            className={cn(buttonVariants(), "hidden lg:flex")}
-          >
-            <LogIn className="me-2 h-4 w-4" />
-            <span>Register</span>
-          </Link>
+          {user ? (
+            <UserDropdown user={user} />
+          ) : (
+            <Link
+              href="/auth/sign-in"
+              className={cn(buttonVariants(), "hidden lg:flex")}
+            >
+              <LogIn className="me-2 h-4 w-4" />
+              <span>Login</span>
+            </Link>
+          )}
         </div>
       </div>
       {isCartOpen && (

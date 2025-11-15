@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { useParams, useRouter, useSearchParams } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { signIn, signOut } from "next-auth/react"
+import { signIn } from "next-auth/react"
 import { useForm } from "react-hook-form"
 
 import type { LocaleType, SignInFormType } from "@/types"
@@ -150,9 +150,6 @@ export function SignInForm() {
         <SeparatorWithText>Or continue with</SeparatorWithText>
         <OAuthLinks />
       </form>
-      <button onClick={() => signOut({ callbackUrl: "/auth/sign-in" })}>
-        Logout
-      </button>
     </Form>
   )
 }

@@ -9,6 +9,7 @@ import { VerticalLayout } from "./vertical-layout"
 export function Layout({ children }: { children: ReactNode }) {
   const isVertical = useIsVertical()
 
+  //i used VerticalLayout as default layout
   return isVertical ? (
     <VerticalLayout>{children}</VerticalLayout>
   ) : (
