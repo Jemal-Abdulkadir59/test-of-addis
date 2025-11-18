@@ -74,13 +74,13 @@ export function UserDropdown(user: UserDropdownProps) {
         <DropdownMenuSeparator />
         <DropdownMenuGroup className="max-w-48">
           <DropdownMenuItem asChild>
-            <Link href="/">
+            <Link href="/account/profile">
               <User className="me-2 size-4" />
               Profile
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link href="/">
+            <Link href="/account/settings">
               <UserCog className="me-2 size-4" />
               Settings
             </Link>

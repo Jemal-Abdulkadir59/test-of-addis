@@ -3,13 +3,15 @@ import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 
 // General protected routes (anyone logged in)
-const protectedRoutes = ["/dashboards", "/admin"]
+const protectedRoutes = ["/dashboards", "/admin", "/account"]
 
 // Specific routes with role restrictions
 const roleProtectedRoutes: Record<string, string[]> = {
   "/dashboards/analytics": ["admin"],
   "/dashboards/rider-dashboard": ["rider"],
   "/dashboards/cook-dashboard": ["chef"],
+  "/account/settings": ["user", "admin", "chef", "rider"],
+  "/account/profile": ["user", "admin", "chef", "rider"],
 }
 
 export async function middleware(req: NextRequest) {
@@ -89,5 +91,5 @@ export async function middleware(req: NextRequest) {
 
 // Apply middleware only to relevant routes
 export const config = {
-  matcher: ["/dashboards/:path*", "/admin/:path*"],
+  matcher: ["/dashboards/:path*", "/admin/:path*", "/account/:path*"],
 }
