@@ -1,16 +1,18 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import {
   useAddToCartMutation,
   useGetMenuQuery,
   useGetSpecialOffersQuery,
   useGetUserCartQuery,
+  useSearchMenuLazyQuery,
 } from "@/generated/graphql"
 import { getSession } from "next-auth/react"
 
 import { useToast } from "@/hooks/use-toast"
+import { Skeleton } from "@/components/ui/skeleton"
 import { CartItem } from "./_components/cart"
 // import CartSheet from "./_components/cart-sheet"
 import CategoryTabs from "./_components/category-tabs"
@@ -22,6 +24,7 @@ import ProductCard from "./_components/product-card"
 import CategoryTabsSkeleton from "@/components/skeleton/categoryTabsSkeleton"
 import ProductCardSkeleton from "@/components/skeleton/productCardSkeleton"
 import { SpecialOffersSkeleton } from "@/components/skeleton/specialOffersSkeleton"
+import debounce from "lodash.debounce"
 
 const Index = () => {
   const { toast } = useToast()
@@ -29,6 +32,29 @@ const Index = () => {
   const [selectedOffer, setSelectedOffer] = useState<string>("")
   const router = useRouter()
   const pathname = usePathname()
+
+  // query to search menu items
+  const [searchTerm, setSearchTerm] = useState("")
+  const [searchMenu, { data: searchResults, loading: loadingSearch }] =
+    useSearchMenuLazyQuery()
+  const searchedMenuItems = searchResults?.menu_items || []
+
+  // If searchResults exist, use them; otherwise, use full menu query results
+  // Debounced search function (400ms)
+  const debouncedSearch = useCallback(
+    debounce((value: string) => {
+      searchMenu({
+        variables: { search: `%${value}%` },
+      })
+    }, 400),
+    []
+  )
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setSearchTerm(value)
+    debouncedSearch(value)
+  }
 
   // Query special offers Data
   const {
@@ -45,11 +71,21 @@ const Index = () => {
   // ✅ UseMemo prevents recalculation every render
   const filteredProducts = useMemo(() => {
     if (!products?.menu_items) return []
-    if (!selectedCategory) return products.menu_items
+    if (!selectedCategory) {
+      return searchedMenuItems.length > 0
+        ? searchedMenuItems
+        : products.menu_items
+    }
+
+    if (searchedMenuItems) {
+      return searchedMenuItems.filter(
+        (item) => item.category_id === selectedCategory
+      )
+    }
     return products.menu_items.filter(
       (item) => item.category_id === selectedCategory
     )
-  }, [products, selectedCategory])
+  }, [products, selectedCategory, searchedMenuItems])
 
   //# Mutation to add item to cart
   const [
@@ -140,7 +176,11 @@ const Index = () => {
       {loading ? (
         <CategoryTabsSkeleton />
       ) : (
-        <CategoryTabs setSelectedCategory={setSelectedCategory} />
+        <CategoryTabs
+          setSelectedCategory={setSelectedCategory}
+          handleChange={handleChange}
+          searchTerm={searchTerm}
+        />
       )}
 
       <main className="container mx-auto px-4 py-8">
@@ -172,10 +212,16 @@ const Index = () => {
             </div>
           </section>
         )}
-        {loading ? (
-          Array.from({ length: 6 }).map((_, i) => (
-            <ProductCardSkeleton key={i} />
-          ))
+        {loading || loadingSearch ? (
+          <>
+            <h2 className="text-3xl font-bold mb-6">
+              {" "}
+              <Skeleton className="h-8 w-20" />
+            </h2>
+            {Array.from({ length: 2 }).map((_, i) => (
+              <ProductCardSkeleton key={i} />
+            ))}
+          </>
         ) : (
           <section>
             <h2 className="text-3xl font-bold mb-6">Menu</h2>

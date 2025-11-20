@@ -4508,6 +4508,24 @@ export type GetOrdersQuery = {
   }>
 }
 
+export type SearchMenuQueryVariables = Exact<{
+  search: Scalars["String"]["input"]
+}>
+
+export type SearchMenuQuery = {
+  __typename?: "query_root"
+  menu_items: Array<{
+    __typename?: "menu_items"
+    id: any
+    name: string
+    description: string
+    price: any
+    category_id: any
+    image_url: string
+    is_available: boolean
+  }>
+}
+
 export type GetSpecialOffersQueryVariables = Exact<{ [key: string]: never }>
 
 export type GetSpecialOffersQuery = {
@@ -5469,6 +5487,98 @@ export type GetOrdersSuspenseQueryHookResult = ReturnType<
 export type GetOrdersQueryResult = Apollo.QueryResult<
   GetOrdersQuery,
   GetOrdersQueryVariables
+>
+export const SearchMenuDocument = gql`
+  query SearchMenu($search: String!) {
+    menu_items(
+      where: {
+        _or: [
+          { name: { _ilike: $search } }
+          { description: { _ilike: $search } }
+          { ingredients: { _ilike: $search } }
+        ]
+      }
+      order_by: { name: asc }
+    ) {
+      id
+      name
+      description
+      price
+      category_id
+      image_url
+      is_available
+    }
+  }
+`
+
+/**
+ * __useSearchMenuQuery__
+ *
+ * To run a query within a React component, call `useSearchMenuQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchMenuQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchMenuQuery({
+ *   variables: {
+ *      search: // value for 'search'
+ *   },
+ * });
+ */
+export function useSearchMenuQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    SearchMenuQuery,
+    SearchMenuQueryVariables
+  > &
+    (
+      | { variables: SearchMenuQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<SearchMenuQuery, SearchMenuQueryVariables>(
+    SearchMenuDocument,
+    options
+  )
+}
+export function useSearchMenuLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    SearchMenuQuery,
+    SearchMenuQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<SearchMenuQuery, SearchMenuQueryVariables>(
+    SearchMenuDocument,
+    options
+  )
+}
+export function useSearchMenuSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<SearchMenuQuery, SearchMenuQueryVariables>
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions }
+  return Apollo.useSuspenseQuery<SearchMenuQuery, SearchMenuQueryVariables>(
+    SearchMenuDocument,
+    options
+  )
+}
+export type SearchMenuQueryHookResult = ReturnType<typeof useSearchMenuQuery>
+export type SearchMenuLazyQueryHookResult = ReturnType<
+  typeof useSearchMenuLazyQuery
+>
+export type SearchMenuSuspenseQueryHookResult = ReturnType<
+  typeof useSearchMenuSuspenseQuery
+>
+export type SearchMenuQueryResult = Apollo.QueryResult<
+  SearchMenuQuery,
+  SearchMenuQueryVariables
 >
 export const GetSpecialOffersDocument = gql`
   query GetSpecialOffers {

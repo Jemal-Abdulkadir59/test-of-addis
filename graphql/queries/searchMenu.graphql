@@ -1,0 +1,20 @@
+query SearchMenu($search: String!) {
+  menu_items(
+    where: {
+      _or: [
+        { name: { _ilike: $search } }
+        { description: { _ilike: $search } }
+        { ingredients: { _ilike: $search } }
+      ]
+    }
+    order_by: { name: asc }
+  ) {
+    id
+    name
+    description
+    price
+    category_id
+    image_url
+    is_available
+  }
+}

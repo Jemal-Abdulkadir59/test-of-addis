@@ -23,9 +23,15 @@ import { Input } from "@/components/ui/input"
 
 interface SelectedCategotyProps {
   setSelectedCategory: (value: string | null) => void
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  searchTerm: string
 }
 
-const CategoryTabs = ({ setSelectedCategory }: SelectedCategotyProps) => {
+const CategoryTabs = ({
+  setSelectedCategory,
+  handleChange,
+  searchTerm,
+}: SelectedCategotyProps) => {
   const [activeCategory, setActiveCategory] = useState("All")
 
   // Query categories
@@ -51,7 +57,12 @@ const CategoryTabs = ({ setSelectedCategory }: SelectedCategotyProps) => {
           </h2>
           <div className="relative w-64 hidden md:block">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input placeholder="Search from menu..." className="pl-10" />
+            <Input
+              placeholder="Search from menu..."
+              className="pl-10"
+              value={searchTerm}
+              onChange={handleChange}
+            />
           </div>
         </div>
         <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
