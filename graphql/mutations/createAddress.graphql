@@ -1,0 +1,27 @@
+mutation createAddress(
+  $user_id: uuid!
+  $customer_phone: numeric!
+  $delivery_address: String!
+  $apartment: String
+  $delivery_instructions: String
+  $place_type: String
+) {
+  insert_address_one(
+    object: {
+      user_id: $user_id
+      customer_phone: $customer_phone
+      delivery_address: $delivery_address
+      apartment: $apartment
+      delivery_instructions: $delivery_instructions
+      place_type: $place_type
+    }
+  ) {
+    id
+    user_id
+    customer_phone
+    delivery_address
+    apartment
+    delivery_instructions
+    place_type
+  }
+}

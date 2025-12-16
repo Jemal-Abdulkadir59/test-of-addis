@@ -3,25 +3,38 @@ import { Clock, Edit, Store } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
+import CartMiniSkeleton from "@/components/skeleton/cartMiniSkeleton"
 
 interface CartItem {
   id: string
-  type: string
-  image: string
-  title: string
-  price: string
   quantity: number
-  discount?: string
+  added_at?: any
+  price_at_purchase: number
+  user: {
+    id: string
+    name: string
+    email: string
+  }
+  menu_item: {
+    id: string
+    name: string
+    description: string
+    price: number
+    image_url: string
+    is_available: boolean
+  }
 }
 
 interface OrderSummaryCardProps {
   items: CartItem[]
   onEditItems?: () => void
+  loadingCart?: boolean
 }
 
 export const OrderSummaryCard = ({
   items,
   onEditItems,
+  loadingCart,
 }: OrderSummaryCardProps) => {
   return (
     <Card>
@@ -31,7 +44,7 @@ export const OrderSummaryCard = ({
             <CardTitle>Order Summary</CardTitle>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Store className="h-4 w-4" />
-              <span>Burger Palace</span>
+              <span>Food Palace</span>
             </div>
           </div>
           {onEditItems && (
@@ -51,7 +64,9 @@ export const OrderSummaryCard = ({
         <Separator />
 
         <div className="space-y-3">
-          {items.length === 0 ? (
+          {loadingCart ? (
+            <CartMiniSkeleton />
+          ) : items.length === 0 ? (
             <p className="text-center text-muted-foreground py-4">
               Your cart is empty
             </p>
@@ -59,19 +74,21 @@ export const OrderSummaryCard = ({
             items.map((item) => (
               <div key={item.id} className="flex gap-3">
                 <img
-                  src={item.image}
-                  alt={item.title}
+                  src={`/img/menu_items/${item.menu_item.image_url}`}
+                  alt={item.menu_item.name}
                   className="w-16 h-16 object-cover rounded-lg"
                 />
                 <div className="flex-1">
                   <div className="flex justify-between">
-                    <h4 className="font-medium text-sm">{item.title}</h4>
+                    <h4 className="font-medium text-sm">
+                      {item.menu_item.name}
+                    </h4>
                     <span className="font-semibold text-sm">
-                      £{(parseFloat(item.price) * item.quantity).toFixed(2)}
+                      £{(item.price_at_purchase * item.quantity).toFixed(2)}
                     </span>
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    Qty: {item.quantity} × £{parseFloat(item.price).toFixed(2)}
+                    Qty: {item.quantity} × £{item.price_at_purchase.toFixed(2)}
                   </p>
                 </div>
               </div>

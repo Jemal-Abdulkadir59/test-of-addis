@@ -1,5 +1,10 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { usePathname, useRouter } from "next/navigation"
+import { useGetUserByIdQuery } from "@/generated/graphql"
+import { getSession } from "next-auth/react"
 import { Briefcase, Home, MapPin, Plus } from "lucide-react"
+
+import type { Session } from "next-auth"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -24,6 +29,7 @@ interface AddressFormProps {
     apartment: string
     deliveryInstructions: string
   }
+
   onInputChange: (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void
@@ -49,6 +55,27 @@ export const AddressForm = ({ formData, onInputChange }: AddressFormProps) => {
   const [deliveryType, setDeliveryType] = useState<"delivery" | "pickup">(
     "delivery"
   )
+
+  // const [session, setSession] = useState<null | Session>(null)
+  const router = useRouter()
+  const pathname = usePathname()
+
+  useEffect(() => {
+    const fetchSession = async () => {
+      const session = await getSession()
+
+      if (!session) {
+        return router.push(`/auth/sign-in?redirectTo=${pathname}`)
+      }
+
+      if (session && session.user) {
+        // setSession(session)
+        formData.customerName = session.user.name || ""
+        formData.customerEmail = session.user.email || ""
+      }
+    }
+    fetchSession()
+  }, [])
 
   const handleAddressSelect = (addressId: string) => {
     setSelectedAddress(addressId)
@@ -156,7 +183,7 @@ export const AddressForm = ({ formData, onInputChange }: AddressFormProps) => {
                     type="tel"
                     value={formData.customerPhone}
                     onChange={onInputChange}
-                    placeholder="+44 7700 900000"
+                    placeholder="+251 970890008"
                     required
                   />
                 </div>
@@ -225,3 +252,13 @@ export const AddressForm = ({ formData, onInputChange }: AddressFormProps) => {
     </Card>
   )
 }
+
+// const {
+//   data: userData,
+//   loading: loadingUser,
+//   error: err,
+// } = useGetUserByIdQuery({
+//   variables: { id: session?.user.id! },
+//   skip: !session, // important — prevents error
+// })
+// const user = userData?.users_by_pk

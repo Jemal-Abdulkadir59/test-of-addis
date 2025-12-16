@@ -142,3 +142,6 @@ export function PlaceOrderButton() {
 //ADD Array of Strings
 ALTER TABLE public.special_offers
 ADD COLUMN terms text[] DEFAULT '{}';
+
+Start Stripe listener:
+stripe listen --forward-to localhost:3000/api/stripe/webhook

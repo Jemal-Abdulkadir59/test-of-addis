@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+🍽️ Test of Addis — Food Ordering Web App
 
-## Getting Started
+Test of Addis is a modern, responsive food ordering web application that showcases Ethiopian cuisine.
+Users can browse food menus, add items to cart, authenticate securely, and place orders through a smooth and intuitive UI.
 
-First, run the development server:
+✨ Features
+🍲 Browse food menu
+🛒 Add / remove items from cart
+🧩 track orders
+🔐 Authentication with NextAuth
+📱 Fully responsive design
+⚡ Fast and optimized UI
+🔄 Real-time data with GraphQL
+🧩 Auto-generated types using GraphQL Codegen
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
+🛠️ Tech Stack
+Frontend
+Next.js
+ShadCN UI
+Tailwind CSS
+NextAuth
+GraphQL Code Generator
+Backend
+Hasura
+GraphQL
+PostgreSQL
+Docker
+
+🏗️ Project Architecture
+Frontend (Next.js)
+│
+│ GraphQL
+▼
+Hasura Engine
+│
+PostgreSQL Database
+
+🔐 Authentication
+Authentication is handled using NextAuth, providing:
+Secure session management
+JWT-based authentication
+Integration with backend APIs
+
+📦 Installation & Setup
+1️⃣ Clone the Repository
+https://github.com/Jemal-Abdulkadir59/test-of-addis.git
+cd test-of-addis
+
+2️⃣ Install Dependencies
+pnpm install
+
+4️⃣ Run the App
 pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+🐳 Docker Setup (Backend)
+docker-compose up -d
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+🧬 GraphQL Codegen
+Generate types automatically:
+pnpm run codegen
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+📸 Screenshots
+Screenshots help visitors understand your project instantly.
+![Home Page](./screenshots/home.png)
+![Home Dark Page](./screenshots/home-dark.png)
+![Menu header Page](./screenshots/menu-head.png)
+![Menu Page](./screenshots/menu.png)
+![Offer](./screenshots/offer.png)
+![cart](./screenshots/cart.png)
+![checkout](./screenshots/checkout.png)
+![delivery-detail](./screenshots/delivery-detail.png)
+![track-order](./screenshots/track-order.png)
+![order-progress](./screenshots/order-progress.png)
+![sign-in](./screenshots/sign-in.png)
+![sign-up](./screenshots/sign-up.png)
+![Menu Mobile Page](./screenshots/menu-mobile.png)
+![option](./screenshots/options.png)

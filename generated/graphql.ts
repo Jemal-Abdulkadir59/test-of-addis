@@ -119,6 +119,262 @@ export type String_Comparison_Exp = {
   _similar?: InputMaybe<Scalars["String"]["input"]>
 }
 
+/** columns and relationships of "address" */
+export type Address = {
+  __typename?: "address"
+  apartment?: Maybe<Scalars["String"]["output"]>
+  customer_phone: Scalars["numeric"]["output"]
+  delivery_address: Scalars["String"]["output"]
+  delivery_instructions?: Maybe<Scalars["String"]["output"]>
+  id: Scalars["uuid"]["output"]
+  place_type: Scalars["String"]["output"]
+  user_id: Scalars["uuid"]["output"]
+}
+
+/** aggregated selection of "address" */
+export type Address_Aggregate = {
+  __typename?: "address_aggregate"
+  aggregate?: Maybe<Address_Aggregate_Fields>
+  nodes: Array<Address>
+}
+
+/** aggregate fields of "address" */
+export type Address_Aggregate_Fields = {
+  __typename?: "address_aggregate_fields"
+  avg?: Maybe<Address_Avg_Fields>
+  count: Scalars["Int"]["output"]
+  max?: Maybe<Address_Max_Fields>
+  min?: Maybe<Address_Min_Fields>
+  stddev?: Maybe<Address_Stddev_Fields>
+  stddev_pop?: Maybe<Address_Stddev_Pop_Fields>
+  stddev_samp?: Maybe<Address_Stddev_Samp_Fields>
+  sum?: Maybe<Address_Sum_Fields>
+  var_pop?: Maybe<Address_Var_Pop_Fields>
+  var_samp?: Maybe<Address_Var_Samp_Fields>
+  variance?: Maybe<Address_Variance_Fields>
+}
+
+/** aggregate fields of "address" */
+export type Address_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Address_Select_Column>>
+  distinct?: InputMaybe<Scalars["Boolean"]["input"]>
+}
+
+/** aggregate avg on columns */
+export type Address_Avg_Fields = {
+  __typename?: "address_avg_fields"
+  customer_phone?: Maybe<Scalars["Float"]["output"]>
+}
+
+/** Boolean expression to filter rows from the table "address". All fields are combined with a logical 'AND'. */
+export type Address_Bool_Exp = {
+  _and?: InputMaybe<Array<Address_Bool_Exp>>
+  _not?: InputMaybe<Address_Bool_Exp>
+  _or?: InputMaybe<Array<Address_Bool_Exp>>
+  apartment?: InputMaybe<String_Comparison_Exp>
+  customer_phone?: InputMaybe<Numeric_Comparison_Exp>
+  delivery_address?: InputMaybe<String_Comparison_Exp>
+  delivery_instructions?: InputMaybe<String_Comparison_Exp>
+  id?: InputMaybe<Uuid_Comparison_Exp>
+  place_type?: InputMaybe<String_Comparison_Exp>
+  user_id?: InputMaybe<Uuid_Comparison_Exp>
+}
+
+/** unique or primary key constraints on table "address" */
+export enum Address_Constraint {
+  /** unique or primary key constraint on columns "id" */
+  AddressPkey = "address_pkey",
+}
+
+/** input type for incrementing numeric columns in table "address" */
+export type Address_Inc_Input = {
+  customer_phone?: InputMaybe<Scalars["numeric"]["input"]>
+}
+
+/** input type for inserting data into table "address" */
+export type Address_Insert_Input = {
+  apartment?: InputMaybe<Scalars["String"]["input"]>
+  customer_phone?: InputMaybe<Scalars["numeric"]["input"]>
+  delivery_address?: InputMaybe<Scalars["String"]["input"]>
+  delivery_instructions?: InputMaybe<Scalars["String"]["input"]>
+  id?: InputMaybe<Scalars["uuid"]["input"]>
+  place_type?: InputMaybe<Scalars["String"]["input"]>
+  user_id?: InputMaybe<Scalars["uuid"]["input"]>
+}
+
+/** aggregate max on columns */
+export type Address_Max_Fields = {
+  __typename?: "address_max_fields"
+  apartment?: Maybe<Scalars["String"]["output"]>
+  customer_phone?: Maybe<Scalars["numeric"]["output"]>
+  delivery_address?: Maybe<Scalars["String"]["output"]>
+  delivery_instructions?: Maybe<Scalars["String"]["output"]>
+  id?: Maybe<Scalars["uuid"]["output"]>
+  place_type?: Maybe<Scalars["String"]["output"]>
+  user_id?: Maybe<Scalars["uuid"]["output"]>
+}
+
+/** aggregate min on columns */
+export type Address_Min_Fields = {
+  __typename?: "address_min_fields"
+  apartment?: Maybe<Scalars["String"]["output"]>
+  customer_phone?: Maybe<Scalars["numeric"]["output"]>
+  delivery_address?: Maybe<Scalars["String"]["output"]>
+  delivery_instructions?: Maybe<Scalars["String"]["output"]>
+  id?: Maybe<Scalars["uuid"]["output"]>
+  place_type?: Maybe<Scalars["String"]["output"]>
+  user_id?: Maybe<Scalars["uuid"]["output"]>
+}
+
+/** response of any mutation on the table "address" */
+export type Address_Mutation_Response = {
+  __typename?: "address_mutation_response"
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars["Int"]["output"]
+  /** data from the rows affected by the mutation */
+  returning: Array<Address>
+}
+
+/** on_conflict condition type for table "address" */
+export type Address_On_Conflict = {
+  constraint: Address_Constraint
+  update_columns?: Array<Address_Update_Column>
+  where?: InputMaybe<Address_Bool_Exp>
+}
+
+/** Ordering options when selecting data from "address". */
+export type Address_Order_By = {
+  apartment?: InputMaybe<Order_By>
+  customer_phone?: InputMaybe<Order_By>
+  delivery_address?: InputMaybe<Order_By>
+  delivery_instructions?: InputMaybe<Order_By>
+  id?: InputMaybe<Order_By>
+  place_type?: InputMaybe<Order_By>
+  user_id?: InputMaybe<Order_By>
+}
+
+/** primary key columns input for table: address */
+export type Address_Pk_Columns_Input = {
+  id: Scalars["uuid"]["input"]
+}
+
+/** select columns of table "address" */
+export enum Address_Select_Column {
+  /** column name */
+  Apartment = "apartment",
+  /** column name */
+  CustomerPhone = "customer_phone",
+  /** column name */
+  DeliveryAddress = "delivery_address",
+  /** column name */
+  DeliveryInstructions = "delivery_instructions",
+  /** column name */
+  Id = "id",
+  /** column name */
+  PlaceType = "place_type",
+  /** column name */
+  UserId = "user_id",
+}
+
+/** input type for updating data in table "address" */
+export type Address_Set_Input = {
+  apartment?: InputMaybe<Scalars["String"]["input"]>
+  customer_phone?: InputMaybe<Scalars["numeric"]["input"]>
+  delivery_address?: InputMaybe<Scalars["String"]["input"]>
+  delivery_instructions?: InputMaybe<Scalars["String"]["input"]>
+  id?: InputMaybe<Scalars["uuid"]["input"]>
+  place_type?: InputMaybe<Scalars["String"]["input"]>
+  user_id?: InputMaybe<Scalars["uuid"]["input"]>
+}
+
+/** aggregate stddev on columns */
+export type Address_Stddev_Fields = {
+  __typename?: "address_stddev_fields"
+  customer_phone?: Maybe<Scalars["Float"]["output"]>
+}
+
+/** aggregate stddev_pop on columns */
+export type Address_Stddev_Pop_Fields = {
+  __typename?: "address_stddev_pop_fields"
+  customer_phone?: Maybe<Scalars["Float"]["output"]>
+}
+
+/** aggregate stddev_samp on columns */
+export type Address_Stddev_Samp_Fields = {
+  __typename?: "address_stddev_samp_fields"
+  customer_phone?: Maybe<Scalars["Float"]["output"]>
+}
+
+/** Streaming cursor of the table "address" */
+export type Address_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Address_Stream_Cursor_Value_Input
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>
+}
+
+/** Initial value of the column from where the streaming should start */
+export type Address_Stream_Cursor_Value_Input = {
+  apartment?: InputMaybe<Scalars["String"]["input"]>
+  customer_phone?: InputMaybe<Scalars["numeric"]["input"]>
+  delivery_address?: InputMaybe<Scalars["String"]["input"]>
+  delivery_instructions?: InputMaybe<Scalars["String"]["input"]>
+  id?: InputMaybe<Scalars["uuid"]["input"]>
+  place_type?: InputMaybe<Scalars["String"]["input"]>
+  user_id?: InputMaybe<Scalars["uuid"]["input"]>
+}
+
+/** aggregate sum on columns */
+export type Address_Sum_Fields = {
+  __typename?: "address_sum_fields"
+  customer_phone?: Maybe<Scalars["numeric"]["output"]>
+}
+
+/** update columns of table "address" */
+export enum Address_Update_Column {
+  /** column name */
+  Apartment = "apartment",
+  /** column name */
+  CustomerPhone = "customer_phone",
+  /** column name */
+  DeliveryAddress = "delivery_address",
+  /** column name */
+  DeliveryInstructions = "delivery_instructions",
+  /** column name */
+  Id = "id",
+  /** column name */
+  PlaceType = "place_type",
+  /** column name */
+  UserId = "user_id",
+}
+
+export type Address_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Address_Inc_Input>
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Address_Set_Input>
+  /** filter the rows which have to be updated */
+  where: Address_Bool_Exp
+}
+
+/** aggregate var_pop on columns */
+export type Address_Var_Pop_Fields = {
+  __typename?: "address_var_pop_fields"
+  customer_phone?: Maybe<Scalars["Float"]["output"]>
+}
+
+/** aggregate var_samp on columns */
+export type Address_Var_Samp_Fields = {
+  __typename?: "address_var_samp_fields"
+  customer_phone?: Maybe<Scalars["Float"]["output"]>
+}
+
+/** aggregate variance on columns */
+export type Address_Variance_Fields = {
+  __typename?: "address_variance_fields"
+  customer_phone?: Maybe<Scalars["Float"]["output"]>
+}
+
 /** columns and relationships of "cart" */
 export type Cart = {
   __typename?: "cart"
@@ -1351,6 +1607,10 @@ export type Menu_Items_Variance_Fields = {
 /** mutation root */
 export type Mutation_Root = {
   __typename?: "mutation_root"
+  /** delete data from the table: "address" */
+  delete_address?: Maybe<Address_Mutation_Response>
+  /** delete single row from the table: "address" */
+  delete_address_by_pk?: Maybe<Address>
   /** delete data from the table: "cart" */
   delete_cart?: Maybe<Cart_Mutation_Response>
   /** delete single row from the table: "cart" */
@@ -1395,6 +1655,10 @@ export type Mutation_Root = {
   delete_users?: Maybe<Users_Mutation_Response>
   /** delete single row from the table: "users" */
   delete_users_by_pk?: Maybe<Users>
+  /** insert data into the table: "address" */
+  insert_address?: Maybe<Address_Mutation_Response>
+  /** insert a single row into the table: "address" */
+  insert_address_one?: Maybe<Address>
   /** insert data into the table: "cart" */
   insert_cart?: Maybe<Cart_Mutation_Response>
   /** insert a single row into the table: "cart" */
@@ -1441,6 +1705,12 @@ export type Mutation_Root = {
   insert_users_one?: Maybe<Users>
   /** login */
   login?: Maybe<LoginResponse>
+  /** update data of the table: "address" */
+  update_address?: Maybe<Address_Mutation_Response>
+  /** update single row of the table: "address" */
+  update_address_by_pk?: Maybe<Address>
+  /** update multiples rows of table: "address" */
+  update_address_many?: Maybe<Array<Maybe<Address_Mutation_Response>>>
   /** update data of the table: "cart" */
   update_cart?: Maybe<Cart_Mutation_Response>
   /** update single row of the table: "cart" */
@@ -1513,6 +1783,16 @@ export type Mutation_Root = {
   update_users_by_pk?: Maybe<Users>
   /** update multiples rows of table: "users" */
   update_users_many?: Maybe<Array<Maybe<Users_Mutation_Response>>>
+}
+
+/** mutation root */
+export type Mutation_RootDelete_AddressArgs = {
+  where: Address_Bool_Exp
+}
+
+/** mutation root */
+export type Mutation_RootDelete_Address_By_PkArgs = {
+  id: Scalars["uuid"]["input"]
 }
 
 /** mutation root */
@@ -1623,6 +1903,18 @@ export type Mutation_RootDelete_UsersArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Users_By_PkArgs = {
   id: Scalars["uuid"]["input"]
+}
+
+/** mutation root */
+export type Mutation_RootInsert_AddressArgs = {
+  objects: Array<Address_Insert_Input>
+  on_conflict?: InputMaybe<Address_On_Conflict>
+}
+
+/** mutation root */
+export type Mutation_RootInsert_Address_OneArgs = {
+  object: Address_Insert_Input
+  on_conflict?: InputMaybe<Address_On_Conflict>
 }
 
 /** mutation root */
@@ -1761,6 +2053,25 @@ export type Mutation_RootInsert_Users_OneArgs = {
 export type Mutation_RootLoginArgs = {
   email: Scalars["String"]["input"]
   password: Scalars["String"]["input"]
+}
+
+/** mutation root */
+export type Mutation_RootUpdate_AddressArgs = {
+  _inc?: InputMaybe<Address_Inc_Input>
+  _set?: InputMaybe<Address_Set_Input>
+  where: Address_Bool_Exp
+}
+
+/** mutation root */
+export type Mutation_RootUpdate_Address_By_PkArgs = {
+  _inc?: InputMaybe<Address_Inc_Input>
+  _set?: InputMaybe<Address_Set_Input>
+  pk_columns: Address_Pk_Columns_Input
+}
+
+/** mutation root */
+export type Mutation_RootUpdate_Address_ManyArgs = {
+  updates: Array<Address_Updates>
 }
 
 /** mutation root */
@@ -2009,9 +2320,9 @@ export type Order_Items = {
   id: Scalars["uuid"]["output"]
   menu_item_id: Scalars["uuid"]["output"]
   order_id: Scalars["uuid"]["output"]
+  price_at_purchase: Scalars["numeric"]["output"]
   quantity: Scalars["Int"]["output"]
   total_price?: Maybe<Scalars["numeric"]["output"]>
-  unit_price: Scalars["numeric"]["output"]
 }
 
 /** aggregated selection of "order_items" */
@@ -2046,9 +2357,9 @@ export type Order_Items_Aggregate_FieldsCountArgs = {
 /** aggregate avg on columns */
 export type Order_Items_Avg_Fields = {
   __typename?: "order_items_avg_fields"
+  price_at_purchase?: Maybe<Scalars["Float"]["output"]>
   quantity?: Maybe<Scalars["Float"]["output"]>
   total_price?: Maybe<Scalars["Float"]["output"]>
-  unit_price?: Maybe<Scalars["Float"]["output"]>
 }
 
 /** Boolean expression to filter rows from the table "order_items". All fields are combined with a logical 'AND'. */
@@ -2059,9 +2370,9 @@ export type Order_Items_Bool_Exp = {
   id?: InputMaybe<Uuid_Comparison_Exp>
   menu_item_id?: InputMaybe<Uuid_Comparison_Exp>
   order_id?: InputMaybe<Uuid_Comparison_Exp>
+  price_at_purchase?: InputMaybe<Numeric_Comparison_Exp>
   quantity?: InputMaybe<Int_Comparison_Exp>
   total_price?: InputMaybe<Numeric_Comparison_Exp>
-  unit_price?: InputMaybe<Numeric_Comparison_Exp>
 }
 
 /** unique or primary key constraints on table "order_items" */
@@ -2072,8 +2383,8 @@ export enum Order_Items_Constraint {
 
 /** input type for incrementing numeric columns in table "order_items" */
 export type Order_Items_Inc_Input = {
+  price_at_purchase?: InputMaybe<Scalars["numeric"]["input"]>
   quantity?: InputMaybe<Scalars["Int"]["input"]>
-  unit_price?: InputMaybe<Scalars["numeric"]["input"]>
 }
 
 /** input type for inserting data into table "order_items" */
@@ -2081,8 +2392,8 @@ export type Order_Items_Insert_Input = {
   id?: InputMaybe<Scalars["uuid"]["input"]>
   menu_item_id?: InputMaybe<Scalars["uuid"]["input"]>
   order_id?: InputMaybe<Scalars["uuid"]["input"]>
+  price_at_purchase?: InputMaybe<Scalars["numeric"]["input"]>
   quantity?: InputMaybe<Scalars["Int"]["input"]>
-  unit_price?: InputMaybe<Scalars["numeric"]["input"]>
 }
 
 /** aggregate max on columns */
@@ -2091,9 +2402,9 @@ export type Order_Items_Max_Fields = {
   id?: Maybe<Scalars["uuid"]["output"]>
   menu_item_id?: Maybe<Scalars["uuid"]["output"]>
   order_id?: Maybe<Scalars["uuid"]["output"]>
+  price_at_purchase?: Maybe<Scalars["numeric"]["output"]>
   quantity?: Maybe<Scalars["Int"]["output"]>
   total_price?: Maybe<Scalars["numeric"]["output"]>
-  unit_price?: Maybe<Scalars["numeric"]["output"]>
 }
 
 /** aggregate min on columns */
@@ -2102,9 +2413,9 @@ export type Order_Items_Min_Fields = {
   id?: Maybe<Scalars["uuid"]["output"]>
   menu_item_id?: Maybe<Scalars["uuid"]["output"]>
   order_id?: Maybe<Scalars["uuid"]["output"]>
+  price_at_purchase?: Maybe<Scalars["numeric"]["output"]>
   quantity?: Maybe<Scalars["Int"]["output"]>
   total_price?: Maybe<Scalars["numeric"]["output"]>
-  unit_price?: Maybe<Scalars["numeric"]["output"]>
 }
 
 /** response of any mutation on the table "order_items" */
@@ -2128,9 +2439,9 @@ export type Order_Items_Order_By = {
   id?: InputMaybe<Order_By>
   menu_item_id?: InputMaybe<Order_By>
   order_id?: InputMaybe<Order_By>
+  price_at_purchase?: InputMaybe<Order_By>
   quantity?: InputMaybe<Order_By>
   total_price?: InputMaybe<Order_By>
-  unit_price?: InputMaybe<Order_By>
 }
 
 /** primary key columns input for table: order_items */
@@ -2147,11 +2458,11 @@ export enum Order_Items_Select_Column {
   /** column name */
   OrderId = "order_id",
   /** column name */
+  PriceAtPurchase = "price_at_purchase",
+  /** column name */
   Quantity = "quantity",
   /** column name */
   TotalPrice = "total_price",
-  /** column name */
-  UnitPrice = "unit_price",
 }
 
 /** input type for updating data in table "order_items" */
@@ -2159,32 +2470,32 @@ export type Order_Items_Set_Input = {
   id?: InputMaybe<Scalars["uuid"]["input"]>
   menu_item_id?: InputMaybe<Scalars["uuid"]["input"]>
   order_id?: InputMaybe<Scalars["uuid"]["input"]>
+  price_at_purchase?: InputMaybe<Scalars["numeric"]["input"]>
   quantity?: InputMaybe<Scalars["Int"]["input"]>
-  unit_price?: InputMaybe<Scalars["numeric"]["input"]>
 }
 
 /** aggregate stddev on columns */
 export type Order_Items_Stddev_Fields = {
   __typename?: "order_items_stddev_fields"
+  price_at_purchase?: Maybe<Scalars["Float"]["output"]>
   quantity?: Maybe<Scalars["Float"]["output"]>
   total_price?: Maybe<Scalars["Float"]["output"]>
-  unit_price?: Maybe<Scalars["Float"]["output"]>
 }
 
 /** aggregate stddev_pop on columns */
 export type Order_Items_Stddev_Pop_Fields = {
   __typename?: "order_items_stddev_pop_fields"
+  price_at_purchase?: Maybe<Scalars["Float"]["output"]>
   quantity?: Maybe<Scalars["Float"]["output"]>
   total_price?: Maybe<Scalars["Float"]["output"]>
-  unit_price?: Maybe<Scalars["Float"]["output"]>
 }
 
 /** aggregate stddev_samp on columns */
 export type Order_Items_Stddev_Samp_Fields = {
   __typename?: "order_items_stddev_samp_fields"
+  price_at_purchase?: Maybe<Scalars["Float"]["output"]>
   quantity?: Maybe<Scalars["Float"]["output"]>
   total_price?: Maybe<Scalars["Float"]["output"]>
-  unit_price?: Maybe<Scalars["Float"]["output"]>
 }
 
 /** Streaming cursor of the table "order_items" */
@@ -2200,17 +2511,17 @@ export type Order_Items_Stream_Cursor_Value_Input = {
   id?: InputMaybe<Scalars["uuid"]["input"]>
   menu_item_id?: InputMaybe<Scalars["uuid"]["input"]>
   order_id?: InputMaybe<Scalars["uuid"]["input"]>
+  price_at_purchase?: InputMaybe<Scalars["numeric"]["input"]>
   quantity?: InputMaybe<Scalars["Int"]["input"]>
   total_price?: InputMaybe<Scalars["numeric"]["input"]>
-  unit_price?: InputMaybe<Scalars["numeric"]["input"]>
 }
 
 /** aggregate sum on columns */
 export type Order_Items_Sum_Fields = {
   __typename?: "order_items_sum_fields"
+  price_at_purchase?: Maybe<Scalars["numeric"]["output"]>
   quantity?: Maybe<Scalars["Int"]["output"]>
   total_price?: Maybe<Scalars["numeric"]["output"]>
-  unit_price?: Maybe<Scalars["numeric"]["output"]>
 }
 
 /** update columns of table "order_items" */
@@ -2222,9 +2533,9 @@ export enum Order_Items_Update_Column {
   /** column name */
   OrderId = "order_id",
   /** column name */
-  Quantity = "quantity",
+  PriceAtPurchase = "price_at_purchase",
   /** column name */
-  UnitPrice = "unit_price",
+  Quantity = "quantity",
 }
 
 export type Order_Items_Updates = {
@@ -2239,25 +2550,25 @@ export type Order_Items_Updates = {
 /** aggregate var_pop on columns */
 export type Order_Items_Var_Pop_Fields = {
   __typename?: "order_items_var_pop_fields"
+  price_at_purchase?: Maybe<Scalars["Float"]["output"]>
   quantity?: Maybe<Scalars["Float"]["output"]>
   total_price?: Maybe<Scalars["Float"]["output"]>
-  unit_price?: Maybe<Scalars["Float"]["output"]>
 }
 
 /** aggregate var_samp on columns */
 export type Order_Items_Var_Samp_Fields = {
   __typename?: "order_items_var_samp_fields"
+  price_at_purchase?: Maybe<Scalars["Float"]["output"]>
   quantity?: Maybe<Scalars["Float"]["output"]>
   total_price?: Maybe<Scalars["Float"]["output"]>
-  unit_price?: Maybe<Scalars["Float"]["output"]>
 }
 
 /** aggregate variance on columns */
 export type Order_Items_Variance_Fields = {
   __typename?: "order_items_variance_fields"
+  price_at_purchase?: Maybe<Scalars["Float"]["output"]>
   quantity?: Maybe<Scalars["Float"]["output"]>
   total_price?: Maybe<Scalars["Float"]["output"]>
-  unit_price?: Maybe<Scalars["Float"]["output"]>
 }
 
 /** columns and relationships of "orders" */
@@ -2266,8 +2577,13 @@ export type Orders = {
   created_at: Scalars["timestamptz"]["output"]
   delivery_address: Scalars["String"]["output"]
   delivery_instructions: Scalars["String"]["output"]
+  delivery_time: Scalars["String"]["output"]
   id: Scalars["uuid"]["output"]
   payment_status: Scalars["String"]["output"]
+  phone: Scalars["String"]["output"]
+  promo_code?: Maybe<Scalars["String"]["output"]>
+  scheduled_date?: Maybe<Scalars["String"]["output"]>
+  scheduled_time?: Maybe<Scalars["String"]["output"]>
   status: Scalars["String"]["output"]
   total_amount: Scalars["numeric"]["output"]
   updated_at: Scalars["timestamptz"]["output"]
@@ -2317,8 +2633,13 @@ export type Orders_Bool_Exp = {
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>
   delivery_address?: InputMaybe<String_Comparison_Exp>
   delivery_instructions?: InputMaybe<String_Comparison_Exp>
+  delivery_time?: InputMaybe<String_Comparison_Exp>
   id?: InputMaybe<Uuid_Comparison_Exp>
   payment_status?: InputMaybe<String_Comparison_Exp>
+  phone?: InputMaybe<String_Comparison_Exp>
+  promo_code?: InputMaybe<String_Comparison_Exp>
+  scheduled_date?: InputMaybe<String_Comparison_Exp>
+  scheduled_time?: InputMaybe<String_Comparison_Exp>
   status?: InputMaybe<String_Comparison_Exp>
   total_amount?: InputMaybe<Numeric_Comparison_Exp>
   updated_at?: InputMaybe<Timestamptz_Comparison_Exp>
@@ -2327,6 +2648,8 @@ export type Orders_Bool_Exp = {
 
 /** unique or primary key constraints on table "orders" */
 export enum Orders_Constraint {
+  /** unique or primary key constraint on columns "phone" */
+  OrdersPhoneKey = "orders_phone_key",
   /** unique or primary key constraint on columns "id" */
   OrdersPkey = "orders_pkey",
 }
@@ -2341,8 +2664,13 @@ export type Orders_Insert_Input = {
   created_at?: InputMaybe<Scalars["timestamptz"]["input"]>
   delivery_address?: InputMaybe<Scalars["String"]["input"]>
   delivery_instructions?: InputMaybe<Scalars["String"]["input"]>
+  delivery_time?: InputMaybe<Scalars["String"]["input"]>
   id?: InputMaybe<Scalars["uuid"]["input"]>
   payment_status?: InputMaybe<Scalars["String"]["input"]>
+  phone?: InputMaybe<Scalars["String"]["input"]>
+  promo_code?: InputMaybe<Scalars["String"]["input"]>
+  scheduled_date?: InputMaybe<Scalars["String"]["input"]>
+  scheduled_time?: InputMaybe<Scalars["String"]["input"]>
   status?: InputMaybe<Scalars["String"]["input"]>
   total_amount?: InputMaybe<Scalars["numeric"]["input"]>
   updated_at?: InputMaybe<Scalars["timestamptz"]["input"]>
@@ -2355,8 +2683,13 @@ export type Orders_Max_Fields = {
   created_at?: Maybe<Scalars["timestamptz"]["output"]>
   delivery_address?: Maybe<Scalars["String"]["output"]>
   delivery_instructions?: Maybe<Scalars["String"]["output"]>
+  delivery_time?: Maybe<Scalars["String"]["output"]>
   id?: Maybe<Scalars["uuid"]["output"]>
   payment_status?: Maybe<Scalars["String"]["output"]>
+  phone?: Maybe<Scalars["String"]["output"]>
+  promo_code?: Maybe<Scalars["String"]["output"]>
+  scheduled_date?: Maybe<Scalars["String"]["output"]>
+  scheduled_time?: Maybe<Scalars["String"]["output"]>
   status?: Maybe<Scalars["String"]["output"]>
   total_amount?: Maybe<Scalars["numeric"]["output"]>
   updated_at?: Maybe<Scalars["timestamptz"]["output"]>
@@ -2369,8 +2702,13 @@ export type Orders_Min_Fields = {
   created_at?: Maybe<Scalars["timestamptz"]["output"]>
   delivery_address?: Maybe<Scalars["String"]["output"]>
   delivery_instructions?: Maybe<Scalars["String"]["output"]>
+  delivery_time?: Maybe<Scalars["String"]["output"]>
   id?: Maybe<Scalars["uuid"]["output"]>
   payment_status?: Maybe<Scalars["String"]["output"]>
+  phone?: Maybe<Scalars["String"]["output"]>
+  promo_code?: Maybe<Scalars["String"]["output"]>
+  scheduled_date?: Maybe<Scalars["String"]["output"]>
+  scheduled_time?: Maybe<Scalars["String"]["output"]>
   status?: Maybe<Scalars["String"]["output"]>
   total_amount?: Maybe<Scalars["numeric"]["output"]>
   updated_at?: Maybe<Scalars["timestamptz"]["output"]>
@@ -2398,8 +2736,13 @@ export type Orders_Order_By = {
   created_at?: InputMaybe<Order_By>
   delivery_address?: InputMaybe<Order_By>
   delivery_instructions?: InputMaybe<Order_By>
+  delivery_time?: InputMaybe<Order_By>
   id?: InputMaybe<Order_By>
   payment_status?: InputMaybe<Order_By>
+  phone?: InputMaybe<Order_By>
+  promo_code?: InputMaybe<Order_By>
+  scheduled_date?: InputMaybe<Order_By>
+  scheduled_time?: InputMaybe<Order_By>
   status?: InputMaybe<Order_By>
   total_amount?: InputMaybe<Order_By>
   updated_at?: InputMaybe<Order_By>
@@ -2420,9 +2763,19 @@ export enum Orders_Select_Column {
   /** column name */
   DeliveryInstructions = "delivery_instructions",
   /** column name */
+  DeliveryTime = "delivery_time",
+  /** column name */
   Id = "id",
   /** column name */
   PaymentStatus = "payment_status",
+  /** column name */
+  Phone = "phone",
+  /** column name */
+  PromoCode = "promo_code",
+  /** column name */
+  ScheduledDate = "scheduled_date",
+  /** column name */
+  ScheduledTime = "scheduled_time",
   /** column name */
   Status = "status",
   /** column name */
@@ -2438,8 +2791,13 @@ export type Orders_Set_Input = {
   created_at?: InputMaybe<Scalars["timestamptz"]["input"]>
   delivery_address?: InputMaybe<Scalars["String"]["input"]>
   delivery_instructions?: InputMaybe<Scalars["String"]["input"]>
+  delivery_time?: InputMaybe<Scalars["String"]["input"]>
   id?: InputMaybe<Scalars["uuid"]["input"]>
   payment_status?: InputMaybe<Scalars["String"]["input"]>
+  phone?: InputMaybe<Scalars["String"]["input"]>
+  promo_code?: InputMaybe<Scalars["String"]["input"]>
+  scheduled_date?: InputMaybe<Scalars["String"]["input"]>
+  scheduled_time?: InputMaybe<Scalars["String"]["input"]>
   status?: InputMaybe<Scalars["String"]["input"]>
   total_amount?: InputMaybe<Scalars["numeric"]["input"]>
   updated_at?: InputMaybe<Scalars["timestamptz"]["input"]>
@@ -2477,8 +2835,13 @@ export type Orders_Stream_Cursor_Value_Input = {
   created_at?: InputMaybe<Scalars["timestamptz"]["input"]>
   delivery_address?: InputMaybe<Scalars["String"]["input"]>
   delivery_instructions?: InputMaybe<Scalars["String"]["input"]>
+  delivery_time?: InputMaybe<Scalars["String"]["input"]>
   id?: InputMaybe<Scalars["uuid"]["input"]>
   payment_status?: InputMaybe<Scalars["String"]["input"]>
+  phone?: InputMaybe<Scalars["String"]["input"]>
+  promo_code?: InputMaybe<Scalars["String"]["input"]>
+  scheduled_date?: InputMaybe<Scalars["String"]["input"]>
+  scheduled_time?: InputMaybe<Scalars["String"]["input"]>
   status?: InputMaybe<Scalars["String"]["input"]>
   total_amount?: InputMaybe<Scalars["numeric"]["input"]>
   updated_at?: InputMaybe<Scalars["timestamptz"]["input"]>
@@ -2500,9 +2863,19 @@ export enum Orders_Update_Column {
   /** column name */
   DeliveryInstructions = "delivery_instructions",
   /** column name */
+  DeliveryTime = "delivery_time",
+  /** column name */
   Id = "id",
   /** column name */
   PaymentStatus = "payment_status",
+  /** column name */
+  Phone = "phone",
+  /** column name */
+  PromoCode = "promo_code",
+  /** column name */
+  ScheduledDate = "scheduled_date",
+  /** column name */
+  ScheduledTime = "scheduled_time",
   /** column name */
   Status = "status",
   /** column name */
@@ -2798,6 +3171,12 @@ export type Payments_Variance_Fields = {
 
 export type Query_Root = {
   __typename?: "query_root"
+  /** fetch data from the table: "address" */
+  address: Array<Address>
+  /** fetch aggregated fields from the table: "address" */
+  address_aggregate: Address_Aggregate
+  /** fetch data from the table: "address" using primary key columns */
+  address_by_pk?: Maybe<Address>
   /** fetch data from the table: "cart" */
   cart: Array<Cart>
   /** fetch aggregated fields from the table: "cart" */
@@ -2864,6 +3243,26 @@ export type Query_Root = {
   users_aggregate: Users_Aggregate
   /** fetch data from the table: "users" using primary key columns */
   users_by_pk?: Maybe<Users>
+}
+
+export type Query_RootAddressArgs = {
+  distinct_on?: InputMaybe<Array<Address_Select_Column>>
+  limit?: InputMaybe<Scalars["Int"]["input"]>
+  offset?: InputMaybe<Scalars["Int"]["input"]>
+  order_by?: InputMaybe<Array<Address_Order_By>>
+  where?: InputMaybe<Address_Bool_Exp>
+}
+
+export type Query_RootAddress_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Address_Select_Column>>
+  limit?: InputMaybe<Scalars["Int"]["input"]>
+  offset?: InputMaybe<Scalars["Int"]["input"]>
+  order_by?: InputMaybe<Array<Address_Order_By>>
+  where?: InputMaybe<Address_Bool_Exp>
+}
+
+export type Query_RootAddress_By_PkArgs = {
+  id: Scalars["uuid"]["input"]
 }
 
 export type Query_RootCartArgs = {
@@ -3624,6 +4023,14 @@ export type Special_Offers_Variance_Fields = {
 
 export type Subscription_Root = {
   __typename?: "subscription_root"
+  /** fetch data from the table: "address" */
+  address: Array<Address>
+  /** fetch aggregated fields from the table: "address" */
+  address_aggregate: Address_Aggregate
+  /** fetch data from the table: "address" using primary key columns */
+  address_by_pk?: Maybe<Address>
+  /** fetch data from the table in a streaming manner: "address" */
+  address_stream: Array<Address>
   /** fetch data from the table: "cart" */
   cart: Array<Cart>
   /** fetch aggregated fields from the table: "cart" */
@@ -3712,6 +4119,32 @@ export type Subscription_Root = {
   users_by_pk?: Maybe<Users>
   /** fetch data from the table in a streaming manner: "users" */
   users_stream: Array<Users>
+}
+
+export type Subscription_RootAddressArgs = {
+  distinct_on?: InputMaybe<Array<Address_Select_Column>>
+  limit?: InputMaybe<Scalars["Int"]["input"]>
+  offset?: InputMaybe<Scalars["Int"]["input"]>
+  order_by?: InputMaybe<Array<Address_Order_By>>
+  where?: InputMaybe<Address_Bool_Exp>
+}
+
+export type Subscription_RootAddress_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Address_Select_Column>>
+  limit?: InputMaybe<Scalars["Int"]["input"]>
+  offset?: InputMaybe<Scalars["Int"]["input"]>
+  order_by?: InputMaybe<Array<Address_Order_By>>
+  where?: InputMaybe<Address_Bool_Exp>
+}
+
+export type Subscription_RootAddress_By_PkArgs = {
+  id: Scalars["uuid"]["input"]
+}
+
+export type Subscription_RootAddress_StreamArgs = {
+  batch_size: Scalars["Int"]["input"]
+  cursor: Array<InputMaybe<Address_Stream_Cursor_Input>>
+  where?: InputMaybe<Address_Bool_Exp>
 }
 
 export type Subscription_RootCartArgs = {
@@ -4295,11 +4728,39 @@ export type AddToCartMutation = {
   } | null
 }
 
+export type CreateAddressMutationVariables = Exact<{
+  user_id: Scalars["uuid"]["input"]
+  customer_phone: Scalars["numeric"]["input"]
+  delivery_address: Scalars["String"]["input"]
+  apartment?: InputMaybe<Scalars["String"]["input"]>
+  delivery_instructions?: InputMaybe<Scalars["String"]["input"]>
+  place_type?: InputMaybe<Scalars["String"]["input"]>
+}>
+
+export type CreateAddressMutation = {
+  __typename?: "mutation_root"
+  insert_address_one?: {
+    __typename?: "address"
+    id: any
+    user_id: any
+    customer_phone: any
+    delivery_address: string
+    apartment?: string | null
+    delivery_instructions?: string | null
+    place_type: string
+  } | null
+}
+
 export type CreateOrderMutationVariables = Exact<{
   user_id: Scalars["uuid"]["input"]
   total_amount: Scalars["numeric"]["input"]
   delivery_address: Scalars["String"]["input"]
   delivery_instructions?: InputMaybe<Scalars["String"]["input"]>
+  phone: Scalars["String"]["input"]
+  delivery_time: Scalars["String"]["input"]
+  scheduled_date?: InputMaybe<Scalars["String"]["input"]>
+  scheduled_time?: InputMaybe<Scalars["String"]["input"]>
+  promo_code?: InputMaybe<Scalars["String"]["input"]>
 }>
 
 export type CreateOrderMutation = {
@@ -4322,7 +4783,7 @@ export type CreateOrderItemsMutationVariables = Exact<{
   order_id: Scalars["uuid"]["input"]
   menu_item_id: Scalars["uuid"]["input"]
   quantity: Scalars["Int"]["input"]
-  unit_price: Scalars["numeric"]["input"]
+  price_at_purchase: Scalars["numeric"]["input"]
 }>
 
 export type CreateOrderItemsMutation = {
@@ -4333,7 +4794,7 @@ export type CreateOrderItemsMutation = {
     order_id: any
     menu_item_id: any
     quantity: number
-    unit_price: any
+    price_at_purchase: any
     total_price?: any | null
   } | null
 }
@@ -4355,6 +4816,24 @@ export type UpdateCartItemMutationVariables = Exact<{
 export type UpdateCartItemMutation = {
   __typename?: "mutation_root"
   update_cart_by_pk?: { __typename?: "cart"; id: any; quantity: number } | null
+}
+
+export type GetUserAddressQueryVariables = Exact<{
+  user_id: Scalars["uuid"]["input"]
+}>
+
+export type GetUserAddressQuery = {
+  __typename?: "query_root"
+  address: Array<{
+    __typename?: "address"
+    id: any
+    user_id: any
+    customer_phone: any
+    delivery_address: string
+    apartment?: string | null
+    delivery_instructions?: string | null
+    place_type: string
+  }>
 }
 
 export type GetUserCartQueryVariables = Exact<{
@@ -4429,6 +4908,7 @@ export type GetUserByIdQuery = {
     role: string
     avatar_url?: string | null
     username?: string | null
+    phone?: string | null
   } | null
 }
 
@@ -4635,12 +5115,94 @@ export type AddToCartMutationOptions = Apollo.BaseMutationOptions<
   AddToCartMutation,
   AddToCartMutationVariables
 >
+export const CreateAddressDocument = gql`
+  mutation createAddress(
+    $user_id: uuid!
+    $customer_phone: numeric!
+    $delivery_address: String!
+    $apartment: String
+    $delivery_instructions: String
+    $place_type: String
+  ) {
+    insert_address_one(
+      object: {
+        user_id: $user_id
+        customer_phone: $customer_phone
+        delivery_address: $delivery_address
+        apartment: $apartment
+        delivery_instructions: $delivery_instructions
+        place_type: $place_type
+      }
+    ) {
+      id
+      user_id
+      customer_phone
+      delivery_address
+      apartment
+      delivery_instructions
+      place_type
+    }
+  }
+`
+export type CreateAddressMutationFn = Apollo.MutationFunction<
+  CreateAddressMutation,
+  CreateAddressMutationVariables
+>
+
+/**
+ * __useCreateAddressMutation__
+ *
+ * To run a mutation, you first call `useCreateAddressMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateAddressMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createAddressMutation, { data, loading, error }] = useCreateAddressMutation({
+ *   variables: {
+ *      user_id: // value for 'user_id'
+ *      customer_phone: // value for 'customer_phone'
+ *      delivery_address: // value for 'delivery_address'
+ *      apartment: // value for 'apartment'
+ *      delivery_instructions: // value for 'delivery_instructions'
+ *      place_type: // value for 'place_type'
+ *   },
+ * });
+ */
+export function useCreateAddressMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateAddressMutation,
+    CreateAddressMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    CreateAddressMutation,
+    CreateAddressMutationVariables
+  >(CreateAddressDocument, options)
+}
+export type CreateAddressMutationHookResult = ReturnType<
+  typeof useCreateAddressMutation
+>
+export type CreateAddressMutationResult =
+  Apollo.MutationResult<CreateAddressMutation>
+export type CreateAddressMutationOptions = Apollo.BaseMutationOptions<
+  CreateAddressMutation,
+  CreateAddressMutationVariables
+>
 export const CreateOrderDocument = gql`
   mutation CreateOrder(
     $user_id: uuid!
     $total_amount: numeric!
     $delivery_address: String!
     $delivery_instructions: String
+    $phone: String!
+    $delivery_time: String!
+    $scheduled_date: String
+    $scheduled_time: String
+    $promo_code: String
   ) {
     insert_orders_one(
       object: {
@@ -4648,6 +5210,11 @@ export const CreateOrderDocument = gql`
         total_amount: $total_amount
         delivery_address: $delivery_address
         delivery_instructions: $delivery_instructions
+        phone: $phone
+        delivery_time: $delivery_time
+        scheduled_date: $scheduled_date
+        scheduled_time: $scheduled_time
+        promo_code: $promo_code
       }
     ) {
       id
@@ -4684,6 +5251,11 @@ export type CreateOrderMutationFn = Apollo.MutationFunction<
  *      total_amount: // value for 'total_amount'
  *      delivery_address: // value for 'delivery_address'
  *      delivery_instructions: // value for 'delivery_instructions'
+ *      phone: // value for 'phone'
+ *      delivery_time: // value for 'delivery_time'
+ *      scheduled_date: // value for 'scheduled_date'
+ *      scheduled_time: // value for 'scheduled_time'
+ *      promo_code: // value for 'promo_code'
  *   },
  * });
  */
@@ -4713,21 +5285,21 @@ export const CreateOrderItemsDocument = gql`
     $order_id: uuid!
     $menu_item_id: uuid!
     $quantity: Int!
-    $unit_price: numeric!
+    $price_at_purchase: numeric!
   ) {
     insert_order_items_one(
       object: {
         order_id: $order_id
         menu_item_id: $menu_item_id
         quantity: $quantity
-        unit_price: $unit_price
+        price_at_purchase: $price_at_purchase
       }
     ) {
       id
       order_id
       menu_item_id
       quantity
-      unit_price
+      price_at_purchase
       total_price
     }
   }
@@ -4753,7 +5325,7 @@ export type CreateOrderItemsMutationFn = Apollo.MutationFunction<
  *      order_id: // value for 'order_id'
  *      menu_item_id: // value for 'menu_item_id'
  *      quantity: // value for 'quantity'
- *      unit_price: // value for 'unit_price'
+ *      price_at_purchase: // value for 'price_at_purchase'
  *   },
  * });
  */
@@ -4879,6 +5451,94 @@ export type UpdateCartItemMutationResult =
 export type UpdateCartItemMutationOptions = Apollo.BaseMutationOptions<
   UpdateCartItemMutation,
   UpdateCartItemMutationVariables
+>
+export const GetUserAddressDocument = gql`
+  query GetUserAddress($user_id: uuid!) {
+    address(where: { user_id: { _eq: $user_id } }) {
+      id
+      user_id
+      customer_phone
+      delivery_address
+      apartment
+      delivery_instructions
+      place_type
+    }
+  }
+`
+
+/**
+ * __useGetUserAddressQuery__
+ *
+ * To run a query within a React component, call `useGetUserAddressQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserAddressQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserAddressQuery({
+ *   variables: {
+ *      user_id: // value for 'user_id'
+ *   },
+ * });
+ */
+export function useGetUserAddressQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetUserAddressQuery,
+    GetUserAddressQueryVariables
+  > &
+    (
+      | { variables: GetUserAddressQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetUserAddressQuery, GetUserAddressQueryVariables>(
+    GetUserAddressDocument,
+    options
+  )
+}
+export function useGetUserAddressLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetUserAddressQuery,
+    GetUserAddressQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetUserAddressQuery, GetUserAddressQueryVariables>(
+    GetUserAddressDocument,
+    options
+  )
+}
+export function useGetUserAddressSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetUserAddressQuery,
+        GetUserAddressQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions }
+  return Apollo.useSuspenseQuery<
+    GetUserAddressQuery,
+    GetUserAddressQueryVariables
+  >(GetUserAddressDocument, options)
+}
+export type GetUserAddressQueryHookResult = ReturnType<
+  typeof useGetUserAddressQuery
+>
+export type GetUserAddressLazyQueryHookResult = ReturnType<
+  typeof useGetUserAddressLazyQuery
+>
+export type GetUserAddressSuspenseQueryHookResult = ReturnType<
+  typeof useGetUserAddressSuspenseQuery
+>
+export type GetUserAddressQueryResult = Apollo.QueryResult<
+  GetUserAddressQuery,
+  GetUserAddressQueryVariables
 >
 export const GetUserCartDocument = gql`
   query GetUserCart($user_id: uuid!) {
@@ -5086,6 +5746,7 @@ export const GetUserByIdDocument = gql`
       role
       avatar_url
       username
+      phone
     }
   }
 `

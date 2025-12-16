@@ -6,5 +6,6 @@ query GetUserById($id: uuid!) {
     role
     avatar_url
     username
+    phone
   }
 }

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { useParams, usePathname } from "next/navigation"
+import { useParams, usePathname, useSearchParams } from "next/navigation"
 import { useGetUserByIdQuery, useGetUserCartQuery } from "@/generated/graphql"
 import { getSession } from "next-auth/react"
 import { LogIn, ShoppingCart } from "lucide-react"
@@ -25,10 +25,12 @@ import { LandingSidebar } from "./landing-sidebar"
 export function LandingHeader() {
   const pathname = usePathname()
   const params = useParams()
+  // const searchParams = useSearchParams();
+
   const [fullPathname, setFullPathname] = useState("")
   const [isCartOpen, setIsCartOpen] = useState(false)
   const [userId, setUserId] = useState<string | null>(null)
-
+  console.log("pathname:", pathname)
   useEffect(() => {
     setFullPathname(pathname + window.location.hash)
   }, [params, pathname])
@@ -135,7 +137,6 @@ export function LandingHeader() {
           onOpenChange={setIsCartOpen}
           cartItems={cartItems}
           loading={loading}
-          onCheckout={() => {}}
         />
       )}
     </header>

@@ -8,10 +8,15 @@ import { Input } from "@/components/ui/input"
 
 interface PromoCodeInputProps {
   onPromoApplied?: (discount: number) => void
+  setPromoCode?: (code: string) => void
+  promoCode?: string
 }
 
-export const PromoCodeInput = ({ onPromoApplied }: PromoCodeInputProps) => {
-  const [promoCode, setPromoCode] = useState("")
+export const PromoCodeInput = ({
+  onPromoApplied,
+  setPromoCode = (code: string) => {},
+  promoCode = "",
+}: PromoCodeInputProps) => {
   const [appliedPromo, setAppliedPromo] = useState<{
     code: string
     discount: number

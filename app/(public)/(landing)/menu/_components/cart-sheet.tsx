@@ -1,9 +1,11 @@
 import React from "react"
+import { usePathname, useRouter } from "next/navigation"
 import {
   useDeleteCartItemMutation,
   useGetSpecialOffersQuery,
   useUpdateCartItemMutation,
 } from "@/generated/graphql"
+import { getSession } from "next-auth/react"
 import { Minus, Plus, X } from "lucide-react"
 
 import { toast } from "@/hooks/use-toast"
@@ -19,23 +21,20 @@ import CartSkeleton from "@/components/skeleton/cartSkeleton"
 // import { CartItem } from "./cart"
 
 interface CartItem {
-  __typename?: "cart" | undefined
-  id: any
+  id: string
   quantity: number
   added_at?: any
   price_at_purchase: number
   user: {
-    __typename?: "users" | undefined
-    id: any
+    id: string
     name: string
     email: string
   }
   menu_item: {
-    __typename?: "menu_items" | undefined
-    id: any
+    id: string
     name: string
     description: string
-    price: any
+    price: number
     image_url: string
     is_available: boolean
   }
@@ -44,7 +43,6 @@ interface CartItem {
 interface CartSheetProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  onCheckout: () => void
   cartItems: CartItem[]
   loading: boolean
 }
@@ -54,16 +52,9 @@ const CartSheet = ({
   onOpenChange,
   cartItems,
   loading,
-  onCheckout,
 }: CartSheetProps) => {
-  // Query special offers Data
-  // const {
-  //   data: offersData,
-  //   loading: loadingOffers,
-  //   error: errorOffer,
-  // } = useGetSpecialOffersQuery()
-
-  // const specialOffers = offersData?.special_offers ?? []
+  const router = useRouter()
+  const pathname = usePathname()
 
   const [deleteCartItem, { loading: loadingDelete, error }] =
     useDeleteCartItemMutation({
@@ -136,7 +127,6 @@ const CartSheet = ({
     }
   }
 
-  console.log(cartItems)
   const subtotal =
     cartItems?.reduce(
       (sum, item) => sum + Number(item.price_at_purchase) * item.quantity,
@@ -268,7 +258,11 @@ const CartSheet = ({
                   <span>ETB{total.toFixed(2)}</span>
                 </div>
               </div>
-              <Button className="w-full" size="lg" onClick={onCheckout}>
+              <Button
+                className="w-full"
+                size="lg"
+                onClick={() => router.push(`/checkout?redirectTo=/menu`)}
+              >
                 Proceed to Checkout (ETB{total.toFixed(2)})
               </Button>
             </div>
@@ -280,3 +274,77 @@ const CartSheet = ({
 }
 
 export default CartSheet
+
+//process checkout
+
+// const [createOrder, { data, loading: loadingCreateOreder, error: errOrder }] =
+//   useCreateOrderMutation()
+// const [insertOrderItems] = useCreateOrderItemsMutation()
+
+// const handleCheckout = async () => {
+//   try {
+//     if (!cartItems || cartItems.length === 0) {
+//       toast({
+//         title: "Cart empty",
+//         description: "Add items to your cart before checking out.",
+//         variant: "default",
+//       })
+//       return
+//     }
+
+//     // 2. Create order (wrap variables under `variables` and use correct names)
+//     const orderRes = await createOrder({
+//       variables: {
+//         user_id: cartItems[0].user.id,
+//         total_amount: total,
+//         delivery_address: "",
+//         delivery_instructions: null,
+//       },
+//     })
+
+//     const orderId = orderRes.data?.insert_orders_one?.id
+//     if (!orderId) {
+//       toast({
+//         title: "Error",
+//         description: "Failed to create order. Please try again.",
+//         variant: "destructive",
+//       })
+//       return
+//     }
+
+//     // 3. Insert order_items (build from cartItems)
+//     // Build and insert each order item using the mutation's expected variables
+//     await Promise.all(
+//       cartItems.map((item) =>
+//         insertOrderItems({
+//           variables: {
+//             order_id: orderId,
+//             menu_item_id: item.menu_item.id,
+//             quantity: item.quantity,
+//             unit_price: item.price_at_purchase,
+//           },
+//         })
+//       )
+//     )
+
+//     // 4. Redirect to Stripe Checkout Session
+//     const resp = await fetch("/api/stripe/checkout", {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify({
+//         orderId,
+//         total,
+//       }),
+//     })
+
+//     const { url } = await resp.json()
+//     if (url) router.push(url)
+//   } catch (error) {
+//     console.error("Checkout failed:", error)
+//     toast({
+//       title: "Error",
+//       description: "Checkout failed. Please try again.",
+//       variant: "destructive",
+//     })
+//   }
+// }

@@ -13,7 +13,6 @@ import { getSession } from "next-auth/react"
 
 import { useToast } from "@/hooks/use-toast"
 import { Skeleton } from "@/components/ui/skeleton"
-import { CartItem } from "./_components/cart"
 // import CartSheet from "./_components/cart-sheet"
 import CategoryTabs from "./_components/category-tabs"
 import HeroSection from "./_components/hero-section"

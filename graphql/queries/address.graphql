@@ -1,0 +1,11 @@
+query GetUserAddress($user_id: uuid!) {
+  address(where: { user_id: { _eq: $user_id } }) {
+    id
+    user_id
+    customer_phone
+    delivery_address
+    apartment
+    delivery_instructions
+    place_type
+  }
+}

@@ -3,6 +3,11 @@ mutation CreateOrder(
   $total_amount: numeric!
   $delivery_address: String!
   $delivery_instructions: String
+  $phone: String!
+  $delivery_time: String!
+  $scheduled_date: String
+  $scheduled_time: String
+  $promo_code: String
 ) {
   insert_orders_one(
     object: {
@@ -10,6 +15,11 @@ mutation CreateOrder(
       total_amount: $total_amount
       delivery_address: $delivery_address
       delivery_instructions: $delivery_instructions
+      phone: $phone
+      delivery_time: $delivery_time
+      scheduled_date: $scheduled_date
+      scheduled_time: $scheduled_time
+      promo_code: $promo_code
     }
   ) {
     id

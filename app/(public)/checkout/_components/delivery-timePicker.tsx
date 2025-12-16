@@ -1,6 +1,8 @@
 import { useState } from "react"
 import { Calendar, Clock } from "lucide-react"
 
+import type { Dispatch, SetStateAction } from "react"
+
 import { cn } from "@/lib/utils"
 
 import { Button } from "@/components/ui/button"
@@ -16,15 +18,21 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 interface DeliveryTimePickerProps {
   selectedTime: string
   onTimeChange: (time: string) => void
+  setScheduledDate: Dispatch<SetStateAction<string>>
+  setScheduledTime: Dispatch<SetStateAction<string>>
+  scheduledDate: string
+  scheduledTime: string
 }
 
 export const DeliveryTimePicker = ({
   selectedTime,
+  scheduledDate,
+  scheduledTime,
+  setScheduledDate,
+  setScheduledTime,
   onTimeChange,
 }: DeliveryTimePickerProps) => {
-  const [scheduledDate, setScheduledDate] = useState<string>("")
-  const [scheduledTime, setScheduledTime] = useState<string>("")
-
+  // console.log(scheduledDate, scheduledTime, "selectedTime")
   const timeSlots = [
     "12:00 PM - 12:30 PM",
     "12:30 PM - 1:00 PM",

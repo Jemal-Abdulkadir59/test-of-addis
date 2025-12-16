@@ -2,21 +2,21 @@ mutation CreateOrderItems(
   $order_id: uuid!
   $menu_item_id: uuid!
   $quantity: Int!
-  $unit_price: numeric!
+  $price_at_purchase: numeric!
 ) {
   insert_order_items_one(
     object: {
       order_id: $order_id
       menu_item_id: $menu_item_id
       quantity: $quantity
-      unit_price: $unit_price
+      price_at_purchase: $price_at_purchase
     }
   ) {
     id
     order_id
     menu_item_id
     quantity
-    unit_price
+    price_at_purchase
     total_price
   }
 }
