@@ -60,12 +60,15 @@ Generate types automatically:
 pnpm run codegen
 
 📸 Screenshots
-Screenshots help visitors understand your project instantly.
+
 ![Home Page](./screenshots/home.png)
 ![Home Dark Page](./screenshots/home-dark.png)
 ![Menu header Page](./screenshots/menu-head.png)
 ![Menu Page](./screenshots/menu.png)
+![Menu Mobile Page](./screenshots/menu-mobile.png)
+![Menu-detail](./screenshots/menu-detail.png)
 ![Offer](./screenshots/offer.png)
+![Special](./screenshots/special-detail.png)
 ![cart](./screenshots/cart.png)
 ![checkout](./screenshots/checkout.png)
 ![delivery-detail](./screenshots/delivery-detail.png)
@@ -73,5 +76,4 @@ Screenshots help visitors understand your project instantly.
 ![order-progress](./screenshots/order-progress.png)
 ![sign-in](./screenshots/sign-in.png)
 ![sign-up](./screenshots/sign-up.png)
-![Menu Mobile Page](./screenshots/menu-mobile.png)
 ![option](./screenshots/options.png)
