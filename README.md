@@ -59,6 +59,10 @@ docker-compose up -d
 Generate types automatically:
 pnpm run codegen
 
+📦 Backend and Database
+1️⃣ Clone the Repository
+https://github.com/Jemal-Abdulkadir59/spicehub-backend.git
+
 📸 Screenshots
 
 ![Home Page](./screenshots/home.png)
