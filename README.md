@@ -1,6 +1,6 @@
 🍽️ Test of Addis — Food Ordering Web App
 
-Test of Addis is a modern, responsive food ordering web application that showcases Ethiopian cuisine.
+Test of Addis is a modern, responsive food ordering web application.
 Users can browse food menus, add items to cart, authenticate securely, and place orders through a smooth and intuitive UI.
 
 ✨ Features
